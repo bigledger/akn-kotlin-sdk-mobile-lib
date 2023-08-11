@@ -13,7 +13,7 @@ import com.akaun.kt.mobile.R
 
 @Composable
 fun AkaunLogo(size: Dp) {
-    Image(painter = painterResource(id = R.drawable.akaun),
+    Image(painter = painterResource(id = R.drawable.akaunsvg),
         contentDescription = "akaun logo",
         contentScale = ContentScale.Fit,
         modifier = Modifier.size(size))
