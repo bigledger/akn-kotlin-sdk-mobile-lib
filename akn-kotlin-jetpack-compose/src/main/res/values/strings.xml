@@ -1,0 +1,33 @@
+<resources>
+    //App specific
+    <string name="app_name">Stock Transfer</string>
+
+    //Common Login, register, forgot password
+    <string name="sign_in">Sign In</string>
+    <string name="email">Email</string>
+    <string name="mobile">Mobile Number</string>
+    <string name="email_or_num">Email or Mobile Number</string>
+    <string name="email_or_num_req">Valid Email or Mobile Number is required.</string>
+    <string name="register_new_id">Register a new akaun ID</string>
+    <string name="password">Password</string>
+    <string name="password_req">Password is required.</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="or_sign_with">Or sign in with</string>
+    <string name="go_to_login">Already have an account?</string>
+    <string name="no_account_register">Don\'t have an account?</string>
+    <string name="register">Register</string>
+    <string name="policy_agree">I agree to all the privacy policy and terms</string>
+    <string name="register_with">Register with</string>
+    <string name="register_now">Register Now</string>
+    <string name="register_policy_1">Register</string>
+    <string name="register_policy_2">Register</string>
+    <string name="submit">Submit</string>
+    <string name="title_forgot_password">Forgot Password</string>
+    <string name="desc_forgot_password">Enter your email or mobile number and we will send you the password reset link to your email or TAC code respectively.</string>
+    <string name="resend_verification">Resend Verification</string>
+    <string name="apple">Apple ID</string>
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+
+
+</resources>
