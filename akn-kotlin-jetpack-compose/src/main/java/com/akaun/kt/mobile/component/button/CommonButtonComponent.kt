@@ -9,9 +9,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CommonButtonComponent(text: String,
+                          modifier : Modifier = Modifier ,
                           enabled: Boolean = true,
                           variant:Boolean = false,
-                          modifier : Modifier = Modifier ,
                           onClick: () -> Unit = {},) {
     val colors = if (variant) {
         ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary,

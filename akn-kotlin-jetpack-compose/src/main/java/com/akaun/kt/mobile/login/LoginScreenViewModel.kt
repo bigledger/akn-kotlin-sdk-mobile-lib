@@ -35,6 +35,7 @@ class LoginScreenViewModel: ViewModel() {
         proceed: () -> Unit
     ) = viewModelScope.launch {
         isLoading = true
+        //TODO: Use the common shared preferences constants
         try {
             val loginRequest = if (isValidEmail(emailOrMobileNumber)) {
                 LoginRequest(email = emailOrMobileNumber, password = password)
