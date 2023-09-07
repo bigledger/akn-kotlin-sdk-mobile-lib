@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "akn-kotlin-sdk-mobile-lib"
 include(":app")
-include(":akn-kotlin-jetpack-compose")
+include(":akn-kotlin-sdk-mobile-lib")
