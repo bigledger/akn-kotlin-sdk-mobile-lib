@@ -43,3 +43,15 @@ object MainAppGraph : Destination {
     override val route = "MainAppGraph"
     override val title = "Main App Graph"
 }
+
+// Personalization
+object Personalization:Destination{
+    override val route = "Personalization"
+    override val title = "Personalization"
+}
+
+// Loading
+object Loading : Destination{
+    override val route = "Loading"
+    override val title = "Loading"
+}

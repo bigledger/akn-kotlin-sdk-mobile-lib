@@ -26,6 +26,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.akaun.kt.mobile.R
+import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
+import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
+import com.akaun.kt.mobile.destination.Loading
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,9 +48,7 @@ fun BackTopBar(title: String, onClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopAppBar(navController : NavHostController,
-                  openDrawer : () -> Unit,
-                  tenantMenu: @Composable () -> Unit
-                  ) {
+                  openDrawer : () -> Unit) {
 
     TopAppBar(
         title = {
@@ -68,18 +69,63 @@ fun MainTopAppBar(navController : NavHostController,
 
         },
         actions ={
-            tenantMenu()
+            TenantListMenu(navController)
         }
     )
 }
 
+//@Composable
+//fun TenantListMenu(navController: NavHostController,
+//                   getTntListSharedPref: () -> String?,
+//                   onClick: () -> Unit) {
+//    val expanded = remember { mutableStateOf(false) }
+//
+//    val serializedTenantCodes = getTntListSharedPref()
+//
+//    IconButton(
+//        onClick = { expanded.value = !expanded.value }
+//    ) {
+//        Icon(
+//            imageVector = Icons.Default.MoreVert,
+//            contentDescription = "More options"
+//        )
+//    }
+//
+//    DropdownMenu(
+//        expanded = expanded.value,
+//        onDismissRequest = { expanded.value = false }
+//    ) {
+//        if (serializedTenantCodes == null){
+//            DropdownMenuItem(text = { Text("No Tenants Found") } , onClick = {} , enabled = false )
+//        }else {
+//            val tenantCodeList: List<String> = serializedTenantCodes.split(",")
+//            tenantCodeList.forEach { tenantCode ->
+//                DropdownMenuItem(
+//                    text = { Text(text = tenantCode) },
+//                    onClick = {
+//                        sharedPreferences.edit().putString("tenantCodeSelected",tenantCode).apply()
+//
+//                        // Set the tenantGuid to new tenantGuid that corresponds to the new tenantCode selected
+//                        val tenantGuidList: List<String> = serializedTenantGuids?.split(",") ?: listOf()
+//                        val correspondingTenantGuid = tenantGuidList[index]
+//                        sharedPreferences.edit().putString("tenantGuidSelected",correspondingTenantGuid).apply()
+//                        navController.navigate(Loading.route)
+//                    }
+//                )
+//            }
+//        }
+//    }
+//}
+
+
+
 @Composable
-fun TenantListMenu(navController: NavHostController,
-                   getTntListSharedPref: () -> String?,
-                   onClick: () -> Unit) {
+fun TenantListMenu(navController: NavHostController) {
     val expanded = remember { mutableStateOf(false) }
 
-    val serializedTenantCodes = getTntListSharedPref()
+    val sharedPreferences = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
+    val serializedTenantCodes = sharedPreferences.getString(CommonSharedPreferenceConstants.TENANT_CODE_LIST, null)
+    val serializedTenantGuids = sharedPreferences.getString(CommonSharedPreferenceConstants.TENANT_GUID_LIST, null)
 
     IconButton(
         onClick = { expanded.value = !expanded.value }
@@ -94,18 +140,25 @@ fun TenantListMenu(navController: NavHostController,
         expanded = expanded.value,
         onDismissRequest = { expanded.value = false }
     ) {
-        if (serializedTenantCodes == null){
+        if(serializedTenantCodes == null){
             DropdownMenuItem(text = { Text("No Tenants Found") } , onClick = {} , enabled = false )
         }else {
             val tenantCodeList: List<String> = serializedTenantCodes.split(",")
-            tenantCodeList.forEach { tenantCode ->
+            tenantCodeList.forEachIndexed { index,  tenantCode ->
                 DropdownMenuItem(
                     text = { Text(text = tenantCode) },
                     onClick = {
-                        onClick()
+                        sharedPreferences.edit().putString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED,tenantCode).apply()
+
+                        // Set the tenantGuid to new tenantGuid that corresponds to the new tenantCode selected
+                        val tenantGuidList: List<String> = serializedTenantGuids?.split(",") ?: listOf()
+                        val correspondingTenantGuid = tenantGuidList[index]
+                        sharedPreferences.edit().putString(CommonSharedPreferenceConstants.TENANT_GUID_SELECTED,correspondingTenantGuid).apply()
+                        navController.navigate(Loading.route)
                     }
                 )
             }
         }
     }
 }
+
