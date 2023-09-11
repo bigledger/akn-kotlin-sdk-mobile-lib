@@ -1,4 +1,4 @@
-package com.akaun.kt.mobile.login
+package com.akaun.kt.mobile.screens
 
 data class LoadingState(val status: Status, val message: String? = null) {
 

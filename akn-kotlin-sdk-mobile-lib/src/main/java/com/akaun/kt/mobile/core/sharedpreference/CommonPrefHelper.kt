@@ -1,4 +1,4 @@
-package com.akaun.kt.mobile.core
+package com.akaun.kt.mobile.core.sharedpreference
 
 import android.content.Context
 import android.content.SharedPreferences

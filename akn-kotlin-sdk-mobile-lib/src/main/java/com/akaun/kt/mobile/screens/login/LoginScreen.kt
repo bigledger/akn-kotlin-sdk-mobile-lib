@@ -1,4 +1,4 @@
-package com.akaun.kt.mobile.login
+package com.akaun.kt.mobile.screens.login
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

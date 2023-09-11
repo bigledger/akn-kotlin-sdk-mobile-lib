@@ -1,4 +1,4 @@
-package com.akaun.kt.mobile.dropdown
+package com.akaun.kt.mobile.component.dropdown
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction

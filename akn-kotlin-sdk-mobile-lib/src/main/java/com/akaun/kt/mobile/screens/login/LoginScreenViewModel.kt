@@ -1,4 +1,4 @@
-package com.akaun.kt.mobile.login
+package com.akaun.kt.mobile.screens.login
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
+import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.utils.isValidEmail
 import kotlinx.coroutines.launch
 
@@ -21,18 +23,19 @@ class LoginScreenViewModel: ViewModel() {
     var isInvalid by mutableStateOf(false)
         private set
 
-    fun resetIsError(): Unit {
+    fun resetIsError() {
         isError = false
     }
 
-    fun resetIsInvalid(): Unit {
+    fun resetIsInvalid() {
         isInvalid = false
     }
 
     fun signInWithEmailOrMobileWithPassword(
         emailOrMobileNumber: String,
         password: String,
-        proceed: () -> Unit
+        onLoginSuccess: () -> Unit,
+        appletCode: String
     ) = viewModelScope.launch {
         isLoading = true
         //TODO: Use the common shared preferences constants
@@ -44,42 +47,42 @@ class LoginScreenViewModel: ViewModel() {
             }
             val loginAPI = AppModule().provideLoginApi()
             val call = loginAPI.login(loginRequest)
-            call.enqueue(object : Callback<BasicApiResponseModel<LoginContainer>> {
+            call.enqueue(object : Callback<BasicApiResponseModel<LoginResponse>> {
                 @SuppressLint("CommitPrefEdits")
-                override fun onResponse(call: Call<BasicApiResponseModel<LoginContainer>>, response: Response<BasicApiResponseModel<LoginContainer>>) {
+                override fun onResponse(call: Call<BasicApiResponseModel<LoginResponse>>, response: Response<BasicApiResponseModel<LoginResponse>>) {
                     if (response.isSuccessful) {
-                        val responseBody: BasicApiResponseModel<LoginContainer>? = response.body()
+                        val responseBody: BasicApiResponseModel<LoginResponse>? = response.body()
                         if (responseBody != null) {
                             // Store the authToken in sharedPreferences
-                            val sharedPreferences = AppSingleton.appContext.getSharedPreferences("userLoginPreferences", Context.MODE_PRIVATE)
+                            val sharedPreferences = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
                             val editor = sharedPreferences.edit()
-                            editor.putString("authToken",responseBody.data.authToken)
+                            editor.putString(CommonSharedPreferenceConstants.AUTH_TOKEN,responseBody.data.authToken)
                             editor.apply()
 
 
                             // Retrieve list of tenants user is linked to
                             val tenantCodesList = responseBody.data.appletTenantTokenList
-                                .filter { it.appletCode == "stockTransferApplet" }
+                                .filter { it.appletCode == appletCode.lowercase() }
                                 .map { it.tenantCode }
 
                             Log.d("login", "onResponse: $tenantCodesList")
                             // Store tenantCode in sharedPreferences
                             if (tenantCodesList.isNotEmpty()) {
                                 val serializedTenantCodes = tenantCodesList.joinToString(",")
-                                editor.putString("tenantCodeList", serializedTenantCodes)
+                                editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_LIST, serializedTenantCodes)
                                 editor.apply()
 
                                 // Put the first tenantCode as default selected in sharedPreferences
-                                editor.putString("tenantCodeSelected", tenantCodesList.get(0))
+                                editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED, tenantCodesList.get(0))
                                 editor.apply()
 
                             } else {
-                                editor.putString("tenantCodeList",null)
-                                editor.putString("tenantCodeSelected",null)
+                                editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_LIST,null)
+                                editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED,null)
                                 editor.apply()
                             }
                             // Proceed to main page
-                            proceed()
+                            onLoginSuccess()
                         }
                     } else {
                         isLoading = false
@@ -108,5 +111,33 @@ class LoginScreenViewModel: ViewModel() {
 
     }
 
+    fun setupLoginSharedPreferences(appletCode: String, responseBody: ) {
+        val sharedPreferences = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
+        val editor = sharedPreferences.edit()
+        editor.putString(CommonSharedPreferenceConstants.AUTH_TOKEN, responseBody.data.authToken)
+        editor.apply()
 
+
+        // Retrieve list of tenants user is linked to
+        val tenantCodesList = responseBody.data.appletTenantTokenList
+            .filter { it.appletCode == appletCode.lowercase() }
+            .map { it.tenantCode }
+
+        Log.d("login", "onResponse: $tenantCodesList")
+        // Store tenantCode in sharedPreferences
+        if (tenantCodesList.isNotEmpty()) {
+            val serializedTenantCodes = tenantCodesList.joinToString(",")
+            editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_LIST, serializedTenantCodes)
+            editor.apply()
+
+            // Put the first tenantCode as default selected in sharedPreferences
+            editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED, tenantCodesList.get(0))
+            editor.apply()
+
+        } else {
+            editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_LIST,null)
+            editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED,null)
+            editor.apply()
+        }
+    }
 }
