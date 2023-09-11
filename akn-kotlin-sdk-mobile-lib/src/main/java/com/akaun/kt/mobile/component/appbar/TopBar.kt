@@ -26,21 +26,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.akaun.kt.mobile.R
+import com.akaun.kt.mobile.component.BackArrow
 import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.destination.Loading
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackTopBar(title: String, onClick: () -> Unit) {
+fun BackTopBar(title: String) {
     TopAppBar(
         title = {
             Text(text = title)
         },
         navigationIcon = {
-            IconButton(onClick = { onClick() }) { // Call the provided lambda
-                Icon(Icons.Default.ArrowBack, contentDescription = "Go back")
-            }
+            BackArrow()
         })
 }
 
