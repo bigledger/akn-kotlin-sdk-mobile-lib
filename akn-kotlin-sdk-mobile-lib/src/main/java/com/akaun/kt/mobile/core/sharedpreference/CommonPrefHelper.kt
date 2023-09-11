@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 
 object CommonPrefHelper {
     const val LOGIN_PREF_NAME = "userLoginPreferences"
+    const val COMMON_PREF_NAME = "commonAppPreferences"
 
     lateinit var appContext: Context
 
