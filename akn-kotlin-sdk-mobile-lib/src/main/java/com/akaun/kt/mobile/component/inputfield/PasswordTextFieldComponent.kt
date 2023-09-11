@@ -23,8 +23,8 @@ import com.akaun.kt.mobile.R
 
 
 @Composable
-fun PasswordTextFieldComponent(passwordValueState: MutableState<String> = mutableStateOf(""),
-                               modifier: Modifier = Modifier,
+fun PasswordTextFieldComponent(modifier: Modifier = Modifier,
+                               passwordValueState: MutableState<String> = mutableStateOf(""),
                                enabled: Boolean = true,
                                readOnly: Boolean = false,
                                label: String = "",

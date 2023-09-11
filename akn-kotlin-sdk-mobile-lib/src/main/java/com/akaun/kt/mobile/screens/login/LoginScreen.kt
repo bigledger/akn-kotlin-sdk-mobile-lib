@@ -90,18 +90,22 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Column(horizontalAlignment = Alignment.Start) {
-                    TitleTextComponent(value = stringResource(R.string.sign_in))
+                    TitleTextComponent(value = stringResource(R.string.sign_in), modifier = Modifier.fillMaxWidth())
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
 
-                    LoginTextFieldComponent(valueState = emailOrMobileNumber,
+                    LoginTextFieldComponent(
+                        modifier = Modifier.fillMaxWidth(),
+                        valueState = emailOrMobileNumber,
                         label = stringResource(R.string.email_or_num),
                         supportingText = stringResource(R.string.email_or_num_req)
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    PasswordTextFieldComponent(passwordValueState = password,
+                    PasswordTextFieldComponent(
+                        modifier = Modifier.fillMaxWidth(),
+                        passwordValueState = password,
                         imeAction = ImeAction.Done,
                         label = stringResource(R.string.password),
                         supportingText = stringResource(R.string.password_req))
@@ -124,7 +128,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                     LoadingButtonComponent(text = stringResource(R.string.sign_in),
                         enabled = validInputs.value,
                         loading = isLoading,
-                        modifier = Modifier.width(280.dp)) {
+                        modifier = Modifier.fillMaxWidth()) {
                         keyboardController?.hide()
                         viewModel.signInWithEmailOrMobileWithPassword(emailOrMobileNumber.value.trim(), password.value.trim()){
                             navController.navigate(MainAppGraph.route) {
@@ -138,7 +142,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                     Spacer(modifier = Modifier.height(5.dp))
 
                     CommonButtonComponent(text = stringResource(R.string.resend_verification),
-                        variant = true , modifier = Modifier.width(280.dp)){
+                        variant = true , modifier = Modifier.fillMaxWidth()){
                         navController.navigate(ResendVerification.route)
                     }
                 }

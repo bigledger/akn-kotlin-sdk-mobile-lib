@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 fun TitleTextComponent(value: String, modifier: Modifier = Modifier) {
     Text(
         text = value,
-        modifier = Modifier,
+        modifier = modifier,
         style = TextStyle(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,

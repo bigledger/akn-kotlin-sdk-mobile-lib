@@ -17,14 +17,14 @@ import com.akaun.kt.mobile.utils.isValidMobileNumber
 
 
 @Composable
-fun LoginTextFieldComponent(valueState: MutableState<String> = mutableStateOf(""),
+fun LoginTextFieldComponent(modifier : Modifier = Modifier,
+                            valueState: MutableState<String> = mutableStateOf(""),
                             enabled: Boolean = true,
                             readOnly: Boolean = false,
                             label: String = "",
                             keyboardType: KeyboardType = KeyboardType.Text,
                             imeAction: ImeAction = ImeAction.Next,
                             onAction: KeyboardActions = KeyboardActions.Default,
-                            modifier : Modifier = Modifier,
                             supportingText: String = "") {
 
     val isErrorEmailOrMobile = rememberSaveable { mutableStateOf(false) }
