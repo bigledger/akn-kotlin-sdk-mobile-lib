@@ -21,5 +21,8 @@ class CommonSharedPreferenceConstants {
 
         // Applet Information
         const val APPLET_CODE = "appletCode"
+
+        //Common App Information
+        const val IS_USER_SIGNED_IN = "isUserSignedIn"
     }
 }
