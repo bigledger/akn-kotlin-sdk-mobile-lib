@@ -6,5 +6,8 @@ class CommonSharedPreferenceConstants {
         const val AUTH_TOKEN = "authToken"
         const val TENANT_CODE_LIST = "tenantCodeList"
         const val TENANT_CODE_SELECTED = "tenantCodeSelected"
+
+        // Applet Information
+        const val APPLET_CODE = "appletCode"
     }
 }
