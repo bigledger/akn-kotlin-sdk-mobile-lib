@@ -1,29 +1,50 @@
-# README #
+# AKAUN Kotlin Mobile Library SDK #
+[![](https://jitpack.io/v/bigledger/akn-kotlin-sdk-mobile-lib.svg)](https://jitpack.io/#bigledger/akn-kotlin-sdk-mobile-lib)
 
-This README would normally document whatever steps are necessary to get your application up and running.
+A a shared UI library that would be used by various other mobile apps, all reusable UI components are be shared in this library. Examples would be the login screen, the standardisation of the logos, the user profile, the pagination, listing, tables like AG-Grid etc. This mobile library may depend on the “com.akaun.kt.sdk.*”, but not the other way round.
 
-### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+## Gradle
+To get a Git project into your build:
 
-### How do I get set up? ###
+Add the dependency below into your **module**'s `build.gradle` file:
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Kotlin
 
-### Contribution guidelines ###
+```gradle
+dependencies {
+    implementation("com.github.bigledger:akn-kotlin-sdk-mobile-lib:Tag")
+}
+```
 
-* Writing tests
-* Code review
-* Other guidelines
+### Groovy
 
-### Who do I talk to? ###
+```gradle
+dependencies {
+    implementation 'com.github.bigledger:akn-kotlin-sdk-mobile-lib:Tag'
+}
+```
 
-* Repo owner or admin
-* Other community or team contact
+Make sure to add this into the settings.gradle file of your project:
+
+### Kotlin
+
+```gradle
+allprojects {
+  repositories {
+    ...
+    maven("https://www.jitpack.io")
+  }
+}
+```
+
+### Groovy
+
+```gradle
+allprojects {
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+  }
+}
+```
