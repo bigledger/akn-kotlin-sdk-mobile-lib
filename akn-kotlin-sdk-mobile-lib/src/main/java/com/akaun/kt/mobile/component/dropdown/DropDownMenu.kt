@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
@@ -50,7 +51,7 @@ fun SearchableMapDropDown(
     readOnly: Boolean = true,
     placeholder: String = "Select Option",
     searchPlaceholder: String = "Select Option",
-    colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(),
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     onDropDownItemSelected: (String, String) -> Unit = { _, _ -> },
     dropdownItem: @Composable (String) -> Unit,
     isError: Boolean = false,
