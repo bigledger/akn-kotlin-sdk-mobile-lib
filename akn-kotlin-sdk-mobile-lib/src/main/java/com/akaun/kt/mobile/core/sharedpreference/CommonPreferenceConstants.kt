@@ -2,8 +2,18 @@ package com.akaun.kt.mobile.core.sharedpreference
 
 class CommonSharedPreferenceConstants {
     companion object {
+        // COMMON_PREF_NAME
+
         // Base URL for APIs
         const val BASE_URL = "baseURL"
+
+        // Applet Information
+        const val APPLET_CODE = "appletCode"
+
+        //Common App Information
+        const val IS_USER_SIGNED_IN = "isUserSignedIn"
+
+        // LOGIN_PREF_NAME
 
         // Login Preferences
         const val AUTH_TOKEN = "authToken"
@@ -18,11 +28,5 @@ class CommonSharedPreferenceConstants {
         const val PASSWORD = "userPassword"
         const val USER_EMAIL = "userEmail"
         const val USER_PHONE = "userPhone"
-
-        // Applet Information
-        const val APPLET_CODE = "appletCode"
-
-        //Common App Information
-        const val IS_USER_SIGNED_IN = "isUserSignedIn"
     }
 }

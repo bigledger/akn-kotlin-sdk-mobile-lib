@@ -40,8 +40,8 @@ class LoginScreenViewModel: ViewModel() {
     fun signInWithEmailOrMobileWithPassword(
         emailOrMobileNumber: String,
         password: String,
-        onLoginSuccess: () -> Unit,
-        appletCode: String
+        appletCode: String,
+        onLoginSuccess: () -> Unit
     ) = viewModelScope.launch {
         isLoading = true
         //TODO: Use the common shared preferences constants
@@ -106,11 +106,11 @@ class LoginScreenViewModel: ViewModel() {
 
         // Filter based on the appletCode
         val appletTenantTokenList = responseBody.data?.appletTenantTokenList
-            ?.filter { it.appletCode == appletCode }
+            ?.filter { it.appletCode.lowercase() == appletCode.lowercase() }
 
         // List of tenants found with the appletCode from filter above
         val tenantCodesList = appletTenantTokenList?.map { it.tenantCode }
-        val tenantGuidList = appletTenantTokenList?.map {it.tenantGuid}
+        val tenantGuidList = appletTenantTokenList?.map { it.tenantGuid }
 
         // stock transfer applet guid
         val firstAppletGuid: String? = appletTenantTokenList?.firstOrNull()?.appletGuid

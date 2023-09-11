@@ -39,6 +39,8 @@ import com.akaun.kt.mobile.component.multimedia.LogoComponent
 import com.akaun.kt.mobile.component.text.BasicTextComponent
 import com.akaun.kt.mobile.component.text.DividerTextComponent
 import com.akaun.kt.mobile.component.text.TitleTextComponent
+import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
+import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.destination.AuthGraph
 import com.akaun.kt.mobile.destination.ForgotPassword
 import com.akaun.kt.mobile.destination.MainAppGraph
@@ -130,7 +132,10 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                         loading = isLoading,
                         modifier = Modifier.fillMaxWidth()) {
                         keyboardController?.hide()
-                        viewModel.signInWithEmailOrMobileWithPassword(emailOrMobileNumber.value.trim(), password.value.trim()){
+                        viewModel.signInWithEmailOrMobileWithPassword(emailOrMobileNumber = emailOrMobileNumber.value.trim(),
+                            password = password.value.trim(),
+                            appletCode = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
+                                .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
                             navController.navigate(MainAppGraph.route) {
                                 popUpTo(AuthGraph.route) {
                                     inclusive = true
