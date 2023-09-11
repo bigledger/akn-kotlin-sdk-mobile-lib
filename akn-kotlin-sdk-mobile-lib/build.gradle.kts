@@ -53,4 +53,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+
+    implementation("com.github.bigledger:akn-kotlin-sdk:0.0.4")
+
 }

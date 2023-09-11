@@ -9,6 +9,10 @@ class CommonSharedPreferenceConstants {
         const val AUTH_TOKEN = "authToken"
         const val TENANT_CODE_LIST = "tenantCodeList"
         const val TENANT_CODE_SELECTED = "tenantCodeSelected"
+        const val SUBJECT_GUID = "subjectGuid"
+        const val TENANT_GUID_LIST = "tenantGuidList"
+        const val TENANT_GUID_SELECTED = "tenantGuidSelected"
+        const val APPLET_GUID = "appletGuid"
 
         // User Credentials
         const val PASSWORD = "userPassword"
