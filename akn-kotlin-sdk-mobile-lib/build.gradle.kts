@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -71,5 +72,18 @@ dependencies {
 //    testImplementation("junit:junit:4.13.2")
 //    androidTestImplementation("androidx.test.ext:junit:1.1.5")
 //    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+}
 
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.github.bigledger"
+            artifactId = "akn-kotlin-sdk-mobile-lib"
+            version = "0.0.12"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
