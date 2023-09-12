@@ -6,6 +6,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun Loading() {
@@ -15,4 +16,10 @@ fun Loading() {
     ) {
         LinearProgressIndicator()
     }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun previewLoading() {
+    Loading()
 }

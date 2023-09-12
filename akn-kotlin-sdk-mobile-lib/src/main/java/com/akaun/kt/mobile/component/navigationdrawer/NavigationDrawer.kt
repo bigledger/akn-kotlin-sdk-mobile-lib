@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.akaun.kt.mobile.component.Spacer12
 import com.akaun.kt.mobile.component.appbar.MainTopAppBar
 import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
@@ -105,23 +107,31 @@ fun NavigationDrawerSheet(
     navController: NavHostController,
     closeNavigationDrawer: () -> Unit
 ) {
-    ModalDrawerSheet() {
+    ModalDrawerSheet(modifier = Modifier.padding(end = 80.dp)) {
 
-        // App Title Display
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-        ) {
-            Text(text = applicationName, fontWeight = FontWeight.Bold, fontSize = 30.sp)
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // App Title Display
+            Row(
+                modifier = Modifier
+                    .padding(10.dp)
+            ) {
+                Text(text = applicationName, fontWeight = FontWeight.Bold, fontSize = 30.sp)
+            }
+
+            // Tenant Name
+            Row(
+                modifier = Modifier
+                    .padding(10.dp)
+            ) {
+                Text(text = tenantName, fontWeight = FontWeight.Medium, fontSize = 20.sp)
+            }
         }
 
-        // Tenant Name
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-        ) {
-            Text(text = tenantName, fontWeight = FontWeight.Medium, fontSize = 20.sp)
-        }
+        Spacer12()
+
+        Divider()
+
+        Spacer12()
 
         // Menu Items
         menuItemList.forEachIndexed { index, menuItem ->
@@ -146,7 +156,8 @@ fun NavigationDrawerSheet(
         Spacer(modifier = Modifier.weight(1f))
 
         // Common modifier for Settings,Personalization and Sign out
-        val commonModifier = Modifier.padding(4.dp)
+        val commonModifier = Modifier
+            .padding(4.dp)
             .height(40.dp)
             .fillMaxWidth()
 
@@ -160,6 +171,10 @@ fun NavigationDrawerSheet(
             verticalArrangement = Arrangement.Bottom
 
         ) {
+            Divider()
+
+            Spacer12()
+
             Row(modifier = commonModifier
                 .clickable {
                     closeNavigationDrawer()
@@ -181,7 +196,7 @@ fun NavigationDrawerSheet(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = "Personalization"
                 )
-                Spacer(modifier = Modifier.width(5.dp))
+                Spacer(modifier = Modifier.width(10.dp))
                 Text(text = "Personalization")
             }
 
