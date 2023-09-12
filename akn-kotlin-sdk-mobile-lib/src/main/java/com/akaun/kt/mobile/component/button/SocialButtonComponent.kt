@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.akaun.kt.mobile.R
 
@@ -42,16 +41,4 @@ fun SocialButtonComponent(text: String = "", icon: Painter, onClick: () -> Unit 
         Text(text = text,
             fontWeight = FontWeight.Bold)
     }
-}
-
-@Composable
-@Preview(showSystemUi = true)
-private fun SocialButtonPreview() {
-    Row(modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly) {
-        SocialButtonComponent(text = "Apple ID", icon = painterResource(id = R.drawable.apple))
-        SocialButtonComponent(text = "Google", icon = painterResource(id = R.drawable.google))
-        SocialButtonComponent(text = "Facebook", icon = painterResource(id = R.drawable.facebook))
-    }
-
 }

@@ -26,7 +26,6 @@ object ResendVerification : Destination {
     override val title = "Resend Verification"
 }
 
-
 // SPLASH GRAPH
 
 object SplashGraph: Destination{
@@ -38,6 +37,18 @@ object Splash: Destination{
     override val title = "Splash Page"
 }
 
+// LOADING GRAPH
+
+object LoadingGraph: Destination{
+    override val route = "Loading graph"
+    override val title = "Loading graph"
+}
+object Loading : Destination{
+    override val route = "Loading"
+    override val title = "Loading"
+}
+
+
 // MAIN APP GRAPH
 object MainAppGraph : Destination {
     override val route = "MainAppGraph"
@@ -48,10 +59,4 @@ object MainAppGraph : Destination {
 object Personalization:Destination{
     override val route = "Personalization"
     override val title = "Personalization"
-}
-
-// Loading
-object Loading : Destination{
-    override val route = "Loading"
-    override val title = "Loading"
 }
