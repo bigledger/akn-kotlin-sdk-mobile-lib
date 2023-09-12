@@ -10,8 +10,6 @@ class CommonSharedPreferenceConstants {
         // Applet Information
         const val APPLET_CODE = "appletCode"
 
-        //Common App Information
-        const val IS_USER_SIGNED_IN = "isUserSignedIn"
 
         // LOGIN_PREF_NAME
 
@@ -23,6 +21,7 @@ class CommonSharedPreferenceConstants {
         const val TENANT_GUID_LIST = "tenantGuidList"
         const val TENANT_GUID_SELECTED = "tenantGuidSelected"
         const val APPLET_GUID = "appletGuid"
+        const val IS_USER_SIGNED_IN = "isUserSignedIn"
 
         // User Credentials
         const val PASSWORD = "userPassword"
