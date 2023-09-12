@@ -22,6 +22,7 @@ class CommonSharedPreferenceConstants {
         const val TENANT_GUID_SELECTED = "tenantGuidSelected"
         const val APPLET_GUID = "appletGuid"
         const val IS_USER_SIGNED_IN = "isUserSignedIn"
+        const val JUST_SIGNED_IN = "justSignedIn"
 
         // User Credentials
         const val PASSWORD = "userPassword"

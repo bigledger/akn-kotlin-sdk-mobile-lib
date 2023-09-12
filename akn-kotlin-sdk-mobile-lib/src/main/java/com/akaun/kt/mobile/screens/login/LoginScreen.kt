@@ -43,6 +43,7 @@ import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.destination.AuthGraph
 import com.akaun.kt.mobile.destination.ForgotPassword
+import com.akaun.kt.mobile.destination.LoadingGraph
 import com.akaun.kt.mobile.destination.MainAppGraph
 import com.akaun.kt.mobile.destination.Register
 import com.akaun.kt.mobile.destination.ResendVerification
@@ -136,7 +137,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                             password = password.value.trim(),
                             appletCode = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
                                 .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
-                            navController.navigate(MainAppGraph.route) {
+                            navController.navigate(LoadingGraph.route) {
                                 popUpTo(AuthGraph.route) {
                                     inclusive = true
                                 }
