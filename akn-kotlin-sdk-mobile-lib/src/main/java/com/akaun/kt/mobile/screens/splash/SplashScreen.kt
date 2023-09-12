@@ -20,13 +20,13 @@ fun SplashScreen(navController: NavHostController, viewModel: SplashViewModel = 
     LaunchedEffect(key1 = true) {
         delay(2000L)
         if (viewModel.isSignedIn()) {
-            navController.navigate(AuthGraph.route) {
+            navController.navigate(LoadingGraph.route) {
                 popUpTo(SplashGraph.route) {
                     inclusive = true
                 }
             }
         } else {
-            navController.navigate(LoadingGraph.route) {
+            navController.navigate(AuthGraph.route) {
                 popUpTo(SplashGraph.route) {
                     inclusive = true
                 }
