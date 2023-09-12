@@ -17,9 +17,3 @@ fun Loading() {
         LinearProgressIndicator()
     }
 }
-
-@Preview(showSystemUi = true)
-@Composable
-fun previewLoading() {
-    Loading()
-}

@@ -59,7 +59,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.bigledger"
             artifactId = "akn-kotlin-sdk-mobile-lib"
-            version = "0.0.4"
+            version = "0.0.6"
 
             afterEvaluate {
                 from(components["release"])
