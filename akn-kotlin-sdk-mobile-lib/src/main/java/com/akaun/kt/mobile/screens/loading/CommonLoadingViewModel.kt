@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
-class CommonLoadingViewModel: ViewModel() {
+open class CommonLoadingViewModel: ViewModel() {
     var isLoading by mutableStateOf(true)
 
     fun initializeCommonAppData() {
