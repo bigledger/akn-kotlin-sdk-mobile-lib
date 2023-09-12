@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.hilt.navigation.compose)
     debugImplementation(libs.ui.tooling)
+    implementation(libs.ui.tooling.preview)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
