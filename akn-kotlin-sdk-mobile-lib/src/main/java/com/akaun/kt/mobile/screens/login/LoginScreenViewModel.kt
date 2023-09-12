@@ -103,6 +103,9 @@ class LoginScreenViewModel: ViewModel() {
         )
         editor.apply()
 
+        // Indicate user has signed in
+        editor.putBoolean(CommonSharedPreferenceConstants.IS_USER_SIGNED_IN, true)
+
 
         // Filter based on the appletCode
         val appletTenantTokenList = responseBody.data?.appletTenantTokenList

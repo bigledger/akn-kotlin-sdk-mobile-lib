@@ -12,14 +12,24 @@ import com.akaun.kt.mobile.component.multimedia.LogoComponent
 import com.akaun.kt.mobile.destination.AuthGraph
 import com.akaun.kt.mobile.destination.SplashGraph
 import kotlinx.coroutines.delay
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.akaun.kt.mobile.destination.LoadingGraph
 
 @Composable
-fun SplashScreen(navController: NavHostController, ) {
+fun SplashScreen(navController: NavHostController, viewModel: SplashViewModel = viewModel()) {
     LaunchedEffect(key1 = true) {
         delay(2000L)
-        navController.navigate(AuthGraph.route) {
-            popUpTo(SplashGraph.route) {
-                inclusive = true
+        if (viewModel.isSignedIn()) {
+            navController.navigate(AuthGraph.route) {
+                popUpTo(SplashGraph.route) {
+                    inclusive = true
+                }
+            }
+        } else {
+            navController.navigate(LoadingGraph.route) {
+                popUpTo(SplashGraph.route) {
+                    inclusive = true
+                }
             }
         }
     }
