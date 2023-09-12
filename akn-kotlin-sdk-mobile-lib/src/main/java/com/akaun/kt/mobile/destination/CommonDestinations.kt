@@ -48,6 +48,17 @@ object Loading : Destination{
     override val title = "Loading"
 }
 
+// SIGN OUT GRAPH
+
+object SignOutGraph: Destination{
+    override val route = "Sign out graph"
+    override val title = "Sign out graph"
+}
+object SignOut : Destination{
+    override val route = "Sign out"
+    override val title = "Sign out"
+}
+
 
 // MAIN APP GRAPH
 object MainAppGraph : Destination {

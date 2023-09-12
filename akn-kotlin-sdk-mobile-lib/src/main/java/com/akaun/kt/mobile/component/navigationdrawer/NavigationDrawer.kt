@@ -229,7 +229,9 @@ fun SignOutRow(
                         showDialog = false
                         closeNavigationDrawer()
                         navController.navigate(AuthGraph.route) {
-                            popUpTo(MainAppGraph.route)
+                            popUpTo(navController.graph.id) {
+                                inclusive = true
+                            }
                         }
                     }
                 ) {
