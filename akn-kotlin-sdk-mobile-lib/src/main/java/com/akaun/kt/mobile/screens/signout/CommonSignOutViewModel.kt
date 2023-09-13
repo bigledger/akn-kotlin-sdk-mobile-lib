@@ -9,6 +9,7 @@ import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 
 abstract class CommonSignOutViewModel: ViewModel() {
     var isLoading by mutableStateOf(true)
+    var isError by mutableStateOf(false)
     fun clearCommonSharedPreferences() {
         val loginSp = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
         val loginSpEditor = loginSp.edit()

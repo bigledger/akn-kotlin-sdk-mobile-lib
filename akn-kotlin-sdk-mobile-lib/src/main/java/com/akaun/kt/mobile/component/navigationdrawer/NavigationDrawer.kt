@@ -49,6 +49,7 @@ import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.destination.AuthGraph
 import com.akaun.kt.mobile.destination.MainAppGraph
 import com.akaun.kt.mobile.destination.Personalization
+import com.akaun.kt.mobile.destination.SignOutGraph
 import kotlinx.coroutines.launch
 
 class MenuItem(
@@ -228,7 +229,7 @@ fun SignOutRow(
                         // Perform sign out actions here
                         showDialog = false
                         closeNavigationDrawer()
-                        navController.navigate(AuthGraph.route) {
+                        navController.navigate(SignOutGraph.route) {
                             popUpTo(navController.graph.id) {
                                 inclusive = true
                             }
