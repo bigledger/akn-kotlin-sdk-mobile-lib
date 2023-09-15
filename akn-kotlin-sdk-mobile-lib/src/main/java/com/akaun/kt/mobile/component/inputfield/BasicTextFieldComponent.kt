@@ -12,18 +12,19 @@ import androidx.compose.ui.text.input.KeyboardType
 
 
 @Composable
-fun BasicTextFieldComponent(value: String = "",
+fun BasicTextFieldComponent(
+                    modifier: Modifier = Modifier,
+                    value: String = "",
                     onValueChange : (String) -> Unit,
-                  enabled: Boolean = true,
-                  readOnly: Boolean = false,
-                  label: String = "",
-                  keyboardType: KeyboardType = KeyboardType.Text,
-                  imeAction: ImeAction = ImeAction.Next,
-                  onAction: KeyboardActions = KeyboardActions.Default,
-                  modifier: Modifier = Modifier,
-                            isError : Boolean = false ,
+                    enabled: Boolean = true,
+                    readOnly: Boolean = false,
+                    label: String = "",
+                    keyboardType: KeyboardType = KeyboardType.Text,
+                    imeAction: ImeAction = ImeAction.Next,
+                    onAction: KeyboardActions = KeyboardActions.Default,
+                    isError : Boolean = false ,
                     trailingIcon: (@Composable () -> Unit)? = null,
-                  supportingText: @Composable (() -> Unit)? = null) {
+                    supportingText: @Composable (() -> Unit)? = null) {
     OutlinedTextField(
         value = value,
         onValueChange = { newValue -> onValueChange(newValue) },

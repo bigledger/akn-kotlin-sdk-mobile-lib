@@ -1,5 +1,6 @@
 package com.akaun.kt.mobile.component.dropdown
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -35,9 +37,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 
 
 private val dropdownMenuVerticalPadding = 8.dp
@@ -48,6 +53,7 @@ fun SearchableMapDropDown(
     modifier: Modifier = Modifier,
     label: String,
     enable: Boolean = true,
+    initialValue : String = "",
     readOnly: Boolean = true,
     placeholder: String = "Select Option",
     searchPlaceholder: String = "Select Option",
@@ -57,7 +63,7 @@ fun SearchableMapDropDown(
     isError: Boolean = false,
     map: MutableMap<String, String>
 ) {
-    var selectedOptionText by rememberSaveable { mutableStateOf("") }
+    var selectedOptionText by rememberSaveable { mutableStateOf(initialValue) }
     var searchedOption by rememberSaveable { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var filteredItems = mutableMapOf<String, String>()

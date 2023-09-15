@@ -1,6 +1,7 @@
 package com.akaun.kt.mobile.component.navigationdrawer
 
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -52,8 +54,14 @@ import com.akaun.kt.mobile.destination.Personalization
 import com.akaun.kt.mobile.destination.SignOutGraph
 import kotlinx.coroutines.launch
 
+
+/*
+Navigation Drawer Version 1
+ */
+
 class MenuItem(
     val name: String,
+    val icon: Icon?,
     val onClick: () -> Unit
 )
 
@@ -136,7 +144,9 @@ fun NavigationDrawerSheet(
 
         // Menu Items
         menuItemList.forEachIndexed { index, menuItem ->
-            NavigationDrawerItem(label = {
+            NavigationDrawerItem(
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                label = {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
@@ -251,6 +261,7 @@ fun SignOutRow(
             }
         )
     }
+
 
     Row(
         modifier = modifier

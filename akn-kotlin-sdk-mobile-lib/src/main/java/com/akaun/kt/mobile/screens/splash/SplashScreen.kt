@@ -7,30 +7,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.akaun.kt.mobile.component.multimedia.LogoComponent
-import com.akaun.kt.mobile.destination.AuthGraph
-import com.akaun.kt.mobile.destination.SplashGraph
 import kotlinx.coroutines.delay
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.akaun.kt.mobile.destination.LoadingGraph
 
 @Composable
-fun SplashScreen(navController: NavHostController, viewModel: SplashViewModel = viewModel()) {
+fun SplashScreen(
+    toAuth: () -> Unit,
+    toLoading: () -> Unit,
+    viewModel: SplashViewModel = viewModel()
+    ) {
     LaunchedEffect(key1 = true) {
         delay(2000L)
         if (viewModel.isSignedIn()) {
-            navController.navigate(LoadingGraph.route) {
-                popUpTo(SplashGraph.route) {
-                    inclusive = true
-                }
-            }
+            toLoading()
         } else {
-            navController.navigate(AuthGraph.route) {
-                popUpTo(SplashGraph.route) {
-                    inclusive = true
-                }
-            }
+            toAuth()
         }
     }
     Box(

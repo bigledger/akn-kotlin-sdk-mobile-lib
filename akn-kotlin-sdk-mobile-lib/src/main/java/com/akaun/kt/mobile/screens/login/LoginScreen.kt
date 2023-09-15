@@ -52,7 +52,13 @@ import com.akaun.kt.mobile.utils.isValidMobileNumber
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewModel = viewModel()) {
+fun LoginScreen(
+    viewModel: LoginScreenViewModel = viewModel(),
+    toRegister: () -> Unit,
+    toResendVerification: () -> Unit,
+    toForgotPassword: () -> Unit,
+    onSignIn: () -> Unit
+) {
     val isLoading = viewModel.isLoading
     val isError = viewModel.isError
     val isInvalid = viewModel.isInvalid
@@ -119,11 +125,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                 Column(horizontalAlignment = Alignment.End) {
                     BasicTextComponent(value = stringResource(R.string.forgot_password),
                         modifier = Modifier.clickable {
-                            navController.navigate(ForgotPassword.route) {
-                                popUpTo(AuthGraph.route) {
-                                    inclusive
-                                }
-                            }
+                            toForgotPassword()
                         })
 
                     Spacer(modifier = Modifier.height(5.dp))
@@ -137,11 +139,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                             password = password.value.trim(),
                             appletCode = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
                                 .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
-                            navController.navigate(LoadingGraph.route) {
-                                popUpTo(AuthGraph.route) {
-                                    inclusive = true
-                                }
-                            }
+                            onSignIn()
                         }
                     }
 
@@ -149,7 +147,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
 
                     CommonButtonComponent(text = stringResource(R.string.resend_verification),
                         variant = true , modifier = Modifier.fillMaxWidth()){
-                        navController.navigate(ResendVerification.route)
+                        toResendVerification()
                     }
                 }
 
@@ -175,11 +173,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewMode
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.clickable {
-                            navController.navigate(Register.route) {
-                                popUpTo(AuthGraph.route) {
-                                    inclusive = true
-                                }
-                            }
+                            toRegister()
                         })
                 }
             }
