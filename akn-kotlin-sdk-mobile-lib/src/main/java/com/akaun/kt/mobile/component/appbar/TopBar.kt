@@ -132,6 +132,7 @@ fun TenantListMenu(navController: NavHostController) {
                         val tenantGuidList: List<String> = serializedTenantGuids?.split(",") ?: listOf()
                         val correspondingTenantGuid = tenantGuidList[index]
                         sharedPreferences.edit().putString(CommonSharedPreferenceConstants.TENANT_GUID_SELECTED,correspondingTenantGuid).apply()
+                        expanded.value = false
                         navController.navigate(Loading.route)
                     }
                 )
@@ -175,6 +176,7 @@ fun TenantMenu(refreshNewTenant: () -> Unit) {
                         val tenantGuidList: List<String> = serializedTenantGuids?.split(",") ?: listOf()
                         val correspondingTenantGuid = tenantGuidList[index]
                         sharedPreferences.edit().putString(CommonSharedPreferenceConstants.TENANT_GUID_SELECTED,correspondingTenantGuid).apply()
+                        expanded.value = false
                         refreshNewTenant()
                     }
                 )
