@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -78,6 +79,7 @@ fun AppNavigationDrawer(
 ) {
     ModalNavigationDrawer(
         gesturesEnabled = gesturesEnabled,
+        drawerState = drawerState,
         drawerContent = {
             AppDrawer(
                 applicationName,
@@ -109,7 +111,7 @@ fun AppDrawer(
        mutableIntStateOf(0)
     }
 
-    ModalDrawerSheet {
+    ModalDrawerSheet(modifier = Modifier.requiredWidth(320.dp)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
