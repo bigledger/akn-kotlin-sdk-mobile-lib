@@ -97,6 +97,7 @@ fun MainTopAppBar(navController: NavHostController,
     )
 }
 
+
 @Composable
 fun TenantListMenu(navController: NavHostController) {
     val expanded = remember { mutableStateOf(false) }
@@ -141,6 +142,28 @@ fun TenantListMenu(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainTopBar(title: String,
+               openDrawer : () -> Unit,
+               refreshNewTenant: () -> Unit) {
+    TopAppBar(
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            IconButton(onClick = { openDrawer() }) { // Call the provided lambda
+                Icon(Icons.Default.Menu, contentDescription = "Open Drawer")
+            }
+
+        },
+        actions ={
+            TenantMenu(refreshNewTenant)
+        }
+    )
+}
+
+// Newer
 @Composable
 fun TenantMenu(refreshNewTenant: () -> Unit) {
     val expanded = remember { mutableStateOf(false) }
