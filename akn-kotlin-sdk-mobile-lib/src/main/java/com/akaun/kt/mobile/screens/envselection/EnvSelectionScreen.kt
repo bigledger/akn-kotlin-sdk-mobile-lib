@@ -17,6 +17,7 @@ import com.akaun.kt.mobile.component.dropdown.BasicDropDown
 import com.akaun.kt.mobile.component.multimedia.LogoComponent
 import com.akaun.kt.mobile.component.text.TitleLargeText
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.akaun.kt.mobile.component.dropdown.DropdownMenuBox
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.shared.Core2Config
 
 
@@ -54,7 +55,7 @@ fun EnvSelectionScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                BasicDropDown(
+                DropdownMenuBox(
                     label = "Environment",
                     value = "",
                     dropDownItemList = environmentList

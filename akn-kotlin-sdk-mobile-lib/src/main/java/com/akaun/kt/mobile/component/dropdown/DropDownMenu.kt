@@ -1,9 +1,11 @@
 package com.akaun.kt.mobile.component.dropdown
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,6 +40,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +54,8 @@ private val dropdownMenuVerticalPadding = 8.dp
 @Composable
 fun SearchableMapDropDown(
     modifier: Modifier = Modifier,
+    innerModifier: Modifier = Modifier,
+    outerModifier: Modifier = Modifier,
     label: String,
     enable: Boolean = true,
     initialValue : String = "",
@@ -98,7 +103,7 @@ fun SearchableMapDropDown(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            modifier = modifier,
+            modifier = outerModifier,
             colors = colors,
             label = { Text(text = label) },
             value = selectedOptionText,
@@ -149,7 +154,7 @@ fun SearchableMapDropDown(
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     OutlinedTextField(
-                        modifier = modifier
+                        modifier = innerModifier
                             .fillMaxWidth()
                             .padding(16.dp),
                         value = searchedOption,
@@ -198,7 +203,58 @@ fun SearchableMapDropDown(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuBox(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String = "",
+    dropDownItemList: List<String>,
+    onClick: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(value) }
 
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(32.dp)
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ) {
+            OutlinedTextField(
+                label = { Text(text = label) },
+                value = selectedText,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                dropDownItemList.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item) },
+                        onClick = {
+                            selectedText = item
+                            expanded = false
+                            onClick(item)
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Deprecated("Not in use anymore, faulty.")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasicDropDown(label: String,
