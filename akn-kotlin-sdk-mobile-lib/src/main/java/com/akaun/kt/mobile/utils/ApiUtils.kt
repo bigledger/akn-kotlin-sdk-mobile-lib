@@ -23,3 +23,17 @@ fun getBaseUrl(): String {
     return sharedPref.getString(CommonSharedPreferenceConstants.BASE_URL, "")
         ?: Core2Config.CLOUD_URL
 }
+
+fun getTenantCode(): String {
+    val sharedPref = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
+
+    return sharedPref.getString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED, "")
+        ?: ""
+}
+
+fun getSubjectGuid(): String {
+    val sharedPref = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
+
+    return sharedPref.getString(CommonSharedPreferenceConstants.SUBJECT_GUID, "")
+        ?: ""
+}
