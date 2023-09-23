@@ -216,12 +216,11 @@ fun DropdownMenuBox(
     var selectedText by rememberSaveable { mutableStateOf(value) }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(32.dp),
+       modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         ExposedDropdownMenuBox(
+            modifier = modifier,
             expanded = expanded,
             onExpandedChange = {
                 expanded = !expanded
@@ -233,15 +232,17 @@ fun DropdownMenuBox(
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier.menuAnchor()
+                modifier = modifier.menuAnchor()
             )
 
             ExposedDropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
+                modifier = modifier
             ) {
                 dropDownItemList.forEach { item ->
                     DropdownMenuItem(
+                        modifier = modifier,
                         text = { Text(text = item) },
                         onClick = {
                             selectedText = item

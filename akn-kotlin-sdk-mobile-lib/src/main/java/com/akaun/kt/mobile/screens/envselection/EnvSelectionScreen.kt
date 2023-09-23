@@ -28,13 +28,12 @@ sealed class Environment(val value: String, val url: String) {
     object Production: Environment("akaun.com", Core2Config.DOMAIN_URL)
 }
 
-//val environmentList = listOf(
-//    Environment.Production.value,
-//    Environment.Cloud.value,
-//    Environment.Dev.value,
-//)
+val environmentList = listOf(
+    Environment.Production.value,
+    Environment.Cloud.value,
+    Environment.Dev.value,
+)
 
-val environmentList = emptyList<String>()
 
 
 @Composable
@@ -62,6 +61,7 @@ fun EnvSelectionScreen(
 
                 DropdownMenuBox(
                     label = "Environment",
+                    modifier = Modifier.fillMaxWidth(),
                     value = "",
                     dropDownItemList = environmentList
                 ) {environment ->
