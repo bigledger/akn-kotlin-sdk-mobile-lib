@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
@@ -27,11 +28,13 @@ sealed class Environment(val value: String, val url: String) {
     object Production: Environment("akaun.com", Core2Config.DOMAIN_URL)
 }
 
-val environmentList = listOf(
-    Environment.Production.value,
-    Environment.Cloud.value,
-    Environment.Dev.value,
-)
+//val environmentList = listOf(
+//    Environment.Production.value,
+//    Environment.Cloud.value,
+//    Environment.Dev.value,
+//)
+
+val environmentList = emptyList<String>()
 
 
 @Composable
@@ -50,10 +53,12 @@ fun EnvSelectionScreen(
             ) {
             LogoComponent(width = 200.dp, height = 50.dp)
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally,) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+                ) {
                 TitleLargeText(text = "Choose the Environment")
-
-                Spacer(modifier = Modifier.height(10.dp))
 
                 DropdownMenuBox(
                     label = "Environment",

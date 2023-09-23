@@ -212,13 +212,14 @@ fun DropdownMenuBox(
     dropDownItemList: List<String>,
     onClick: (String) -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(value) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var selectedText by rememberSaveable { mutableStateOf(value) }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(32.dp)
+            .padding(32.dp),
+        contentAlignment = Alignment.Center
     ) {
         ExposedDropdownMenuBox(
             expanded = expanded,
