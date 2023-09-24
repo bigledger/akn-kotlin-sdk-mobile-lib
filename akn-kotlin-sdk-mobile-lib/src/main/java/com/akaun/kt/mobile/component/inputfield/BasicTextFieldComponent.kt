@@ -24,6 +24,7 @@ fun BasicTextFieldComponent(
                     onAction: KeyboardActions = KeyboardActions.Default,
                     isError : Boolean = false ,
                     trailingIcon: (@Composable () -> Unit)? = null,
+                    leadingIcon: @Composable (() -> Unit)? = null,
                     supportingText: @Composable (() -> Unit)? = null) {
     OutlinedTextField(
         value = value,
@@ -36,6 +37,7 @@ fun BasicTextFieldComponent(
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),
         keyboardActions = onAction,
         supportingText = supportingText,
+        leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         isError = isError
     )

@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
@@ -18,6 +19,9 @@ fun LoadingButtonComponent(text: String,
                            enabled: Boolean = true,
                            loading: Boolean = false,
                            variant:Boolean = false,
+                           defaultElevation: Dp = 10.dp,
+                           pressedElevation: Dp = 10.dp,
+                           disabledElevation: Dp = 10.dp,
                            onClick: () -> Unit = {}) {
     val colors = if (variant) {
         ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary,
@@ -30,9 +34,9 @@ fun LoadingButtonComponent(text: String,
     Button(enabled = enabled, onClick = onClick,
         modifier = modifier ,
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 10.dp,
-            pressedElevation = 5.dp,
-            disabledElevation = 0.dp,
+            defaultElevation = defaultElevation,
+            pressedElevation = pressedElevation,
+            disabledElevation = disabledElevation,
         ),
         colors = colors
     ) {
