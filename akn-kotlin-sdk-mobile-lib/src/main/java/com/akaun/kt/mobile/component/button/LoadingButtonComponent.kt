@@ -20,8 +20,8 @@ fun LoadingButtonComponent(text: String,
                            loading: Boolean = false,
                            variant:Boolean = false,
                            defaultElevation: Dp = 10.dp,
-                           pressedElevation: Dp = 10.dp,
-                           disabledElevation: Dp = 10.dp,
+                           pressedElevation: Dp = 5.dp,
+                           disabledElevation: Dp = 0.dp,
                            onClick: () -> Unit = {}) {
     val colors = if (variant) {
         ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary,

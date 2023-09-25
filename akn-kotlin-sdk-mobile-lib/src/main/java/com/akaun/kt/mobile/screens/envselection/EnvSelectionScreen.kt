@@ -81,6 +81,7 @@ fun EnvSelectionScreen(
             }
 
             CommonButtonComponent(
+                modifier = Modifier.fillMaxWidth(),
                 text = "Proceed",
                 enabled = viewModel.isEnvSelected
                 ) {

@@ -37,3 +37,4 @@ fun getSubjectGuid(): String {
     return sharedPref.getString(CommonSharedPreferenceConstants.SUBJECT_GUID, "")
         ?: ""
 }
+

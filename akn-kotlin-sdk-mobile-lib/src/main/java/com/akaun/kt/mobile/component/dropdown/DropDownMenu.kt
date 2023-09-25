@@ -20,6 +20,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -203,59 +204,6 @@ fun SearchableMapDropDown(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropdownMenuBox(
-    modifier: Modifier = Modifier,
-    label: String,
-    value: String = "",
-    dropDownItemList: List<String>,
-    onClick: (String) -> Unit
-) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-    var selectedText by rememberSaveable { mutableStateOf(value) }
-
-    Box(
-       modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
-        ExposedDropdownMenuBox(
-            modifier = modifier,
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
-        ) {
-            OutlinedTextField(
-                label = { Text(text = label) },
-                value = selectedText,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = modifier.menuAnchor()
-            )
-
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = modifier
-            ) {
-                dropDownItemList.forEach { item ->
-                    DropdownMenuItem(
-                        modifier = modifier,
-                        text = { Text(text = item) },
-                        onClick = {
-                            selectedText = item
-                            expanded = false
-                            onClick(item)
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
-
 @Deprecated("Not in use anymore, faulty.")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -294,6 +242,75 @@ fun BasicDropDown(label: String,
                         onClick(dropDownItem)
                         expanded.value = false
                     })
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuBox(
+    modifier: Modifier = Modifier,
+    label: String,
+    enabled: Boolean = true,
+    value: String = "",
+    dropDownItemList: List<String>,
+    onClick: (String) -> Unit
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var selectedText by rememberSaveable { mutableStateOf(value) }
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        ExposedDropdownMenuBox(
+            modifier = modifier,
+            expanded = expanded,
+            onExpandedChange = {
+                if (enabled) {
+                    expanded = !expanded
+                }
+            }
+        ) {
+            OutlinedTextField(
+                label = { Text(text = label) },
+                value = selectedText,
+                onValueChange = {},
+                enabled = enabled,
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = modifier.menuAnchor(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledContainerColor = Color.Transparent,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = modifier
+            ) {
+                dropDownItemList.forEach { item ->
+                    DropdownMenuItem(
+                        modifier = modifier,
+                        text = { Text(text = item) },
+                        onClick = {
+                            selectedText = item
+                            expanded = false
+                            onClick(item)
+                        }
+                    )
+                }
             }
         }
     }
