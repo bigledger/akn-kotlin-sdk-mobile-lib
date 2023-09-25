@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -12,7 +13,11 @@ fun CommonButtonComponent(text: String,
                           modifier : Modifier = Modifier ,
                           enabled: Boolean = true,
                           variant:Boolean = false,
-                          onClick: () -> Unit = {},) {
+                          defaultElevation: Dp = 10.dp,
+                          pressedElevation: Dp = 5.dp,
+                          disabledElevation: Dp = 0.dp,
+                          onClick: () -> Unit = {},
+                          ) {
     val colors = if (variant) {
         ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = MaterialTheme.colorScheme.onSecondary
@@ -24,9 +29,9 @@ fun CommonButtonComponent(text: String,
     Button(enabled = enabled, onClick = onClick,
         modifier = modifier,
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 10.dp,
-            pressedElevation = 5.dp,
-            disabledElevation = 0.dp,
+            defaultElevation = defaultElevation,
+            pressedElevation = pressedElevation,
+            disabledElevation = disabledElevation,
         ),
         colors = colors
     ) {

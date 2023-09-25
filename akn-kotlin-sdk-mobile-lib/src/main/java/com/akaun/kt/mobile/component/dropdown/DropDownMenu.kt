@@ -30,6 +30,7 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -278,6 +279,75 @@ fun DropdownMenuBox(
                 value = selectedText,
                 onValueChange = {},
                 enabled = enabled,
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = modifier.menuAnchor(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledContainerColor = Color.Transparent,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = modifier
+            ) {
+                dropDownItemList.forEach { item ->
+                    DropdownMenuItem(
+                        modifier = modifier,
+                        text = { Text(text = item) },
+                        onClick = {
+                            selectedText = item
+                            expanded = false
+                            onClick(item)
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuBox(
+    modifier: Modifier = Modifier,
+    label: String,
+    enabled: MutableState<Boolean>,
+    value: String = "",
+    dropDownItemList: List<String>,
+    onClick: (String) -> Unit
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var selectedText by rememberSaveable { mutableStateOf(value) }
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        ExposedDropdownMenuBox(
+            modifier = modifier,
+            expanded = expanded,
+            onExpandedChange = {
+                if (enabled.value) {
+                    expanded = ! expanded
+                }
+            }
+        ) {
+            OutlinedTextField(
+                label = { Text(text = label) },
+                value = selectedText,
+                onValueChange = {},
+                enabled = enabled.value,
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = modifier.menuAnchor(),
