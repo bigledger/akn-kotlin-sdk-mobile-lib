@@ -317,6 +317,7 @@ fun DropdownMenuBox(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownMenuBox(
@@ -329,6 +330,11 @@ fun DropdownMenuBox(
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedText by rememberSaveable { mutableStateOf(value) }
+
+    // Reset the value when disabled.
+    if (!enabled.value) {
+        selectedText = ""
+    }
 
     Box(
         modifier = modifier,
