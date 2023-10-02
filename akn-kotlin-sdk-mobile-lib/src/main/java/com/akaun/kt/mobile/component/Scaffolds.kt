@@ -18,8 +18,8 @@ import com.akaun.kt.mobile.component.appbar.MainTopBar
 @Composable
 fun DefaultBackScaffold(
     title: String,
+    actions: @Composable() (RowScope.() -> Unit) = { },
     content: @Composable (PaddingValues) -> Unit,
-    actions: @Composable() (RowScope.() -> Unit) = { }
 ) {
     Scaffold(
         modifier = Modifier.systemBarsPadding(),
