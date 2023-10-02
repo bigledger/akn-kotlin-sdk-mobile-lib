@@ -1,6 +1,7 @@
 package com.akaun.kt.mobile.component
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.FabPosition
@@ -18,11 +19,15 @@ import com.akaun.kt.mobile.component.appbar.MainTopBar
 fun DefaultBackScaffold(
     title: String,
     content: @Composable (PaddingValues) -> Unit,
+    actions: @Composable() (RowScope.() -> Unit) = { }
 ) {
     Scaffold(
         modifier = Modifier.systemBarsPadding(),
         topBar = {
-            BackTopBar(title = title)
+            BackTopBar(
+                title = title,
+                actions = actions
+                )
         },
         content = content
     )
