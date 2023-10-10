@@ -39,6 +39,9 @@ val environmentList = listOf(
 @Composable
 fun EnvSelectionScreen(
     toSignIn: () -> Unit,
+    devAppletCode: String,
+    cloudAppletCode: String,
+    productionAppletCode: String,
     viewModel: EnvSelectionViewModel = viewModel()
     ) {
 
@@ -69,12 +72,15 @@ fun EnvSelectionScreen(
                     when (environment) {
                         Environment.Production.value -> {
                             viewModel.setEnvironment(Environment.Production.url)
+                            viewModel.setEnvironmentAppletCode(productionAppletCode)
                         }
                         Environment.Cloud.value -> {
                             viewModel.setEnvironment(Environment.Cloud.url)
+                            viewModel.setEnvironmentAppletCode(cloudAppletCode)
                         }
                         Environment.Dev.value -> {
                             viewModel.setEnvironment(Environment.Dev.url)
+                            viewModel.setEnvironmentAppletCode(devAppletCode)
                         }
                     }
                 }
@@ -94,5 +100,5 @@ fun EnvSelectionScreen(
 @Preview
 @Composable
 fun PreviewEnvScreen() {
-    EnvSelectionScreen({})
+//    EnvSelectionScreen(""{})
 }
