@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
@@ -17,6 +18,7 @@ import com.akaun.kt.mobile.component.dropdown.BasicDropDown
 import com.akaun.kt.mobile.component.multimedia.LogoComponent
 import com.akaun.kt.mobile.component.text.TitleLargeText
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.akaun.kt.mobile.component.dropdown.DropdownMenuBox
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.shared.Core2Config
 
 
@@ -33,9 +35,13 @@ val environmentList = listOf(
 )
 
 
+
 @Composable
 fun EnvSelectionScreen(
     toSignIn: () -> Unit,
+    devAppletCode: String,
+    cloudAppletCode: String,
+    productionAppletCode: String,
     viewModel: EnvSelectionViewModel = viewModel()
     ) {
 
@@ -49,13 +55,16 @@ fun EnvSelectionScreen(
             ) {
             LogoComponent(width = 200.dp, height = 50.dp)
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally,) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+                ) {
                 TitleLargeText(text = "Choose the Environment")
 
-                Spacer(modifier = Modifier.height(10.dp))
-
-                BasicDropDown(
+                DropdownMenuBox(
                     label = "Environment",
+                    modifier = Modifier.fillMaxWidth(),
                     value = "",
                     dropDownItemList = environmentList
                 ) {environment ->
@@ -63,18 +72,22 @@ fun EnvSelectionScreen(
                     when (environment) {
                         Environment.Production.value -> {
                             viewModel.setEnvironment(Environment.Production.url)
+                            viewModel.setEnvironmentAppletCode(productionAppletCode)
                         }
                         Environment.Cloud.value -> {
                             viewModel.setEnvironment(Environment.Cloud.url)
+                            viewModel.setEnvironmentAppletCode(cloudAppletCode)
                         }
                         Environment.Dev.value -> {
                             viewModel.setEnvironment(Environment.Dev.url)
+                            viewModel.setEnvironmentAppletCode(devAppletCode)
                         }
                     }
                 }
             }
 
             CommonButtonComponent(
+                modifier = Modifier.fillMaxWidth(),
                 text = "Proceed",
                 enabled = viewModel.isEnvSelected
                 ) {
@@ -87,5 +100,5 @@ fun EnvSelectionScreen(
 @Preview
 @Composable
 fun PreviewEnvScreen() {
-    EnvSelectionScreen({})
+//    EnvSelectionScreen(""{})
 }

@@ -22,4 +22,10 @@ class EnvSelectionViewModel: ViewModel() {
             isEnvSelected = true
         }
     }
+    fun setEnvironmentAppletCode(appletCode: String) {
+        val sharedPreferences = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
+        val editor = sharedPreferences.edit()
+        editor.putString(CommonSharedPreferenceConstants.APPLET_CODE, appletCode)
+        editor.apply()
+    }
 }

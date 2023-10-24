@@ -50,7 +50,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    api (libs.akn.client.sdk)
+    implementation(libs.akn.client.sdk)
 
 }
 

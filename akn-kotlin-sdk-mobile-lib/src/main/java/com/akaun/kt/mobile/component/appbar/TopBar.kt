@@ -3,6 +3,7 @@ package com.akaun.kt.mobile.component.appbar
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -33,14 +34,18 @@ import com.akaun.kt.mobile.destination.Loading
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackTopBar(title: String) {
+fun BackTopBar(
+    title: String,
+    actions: @Composable() (RowScope.() -> Unit) = { }) {
     TopAppBar(
         title = {
             Text(text = title)
         },
         navigationIcon = {
             BackArrow()
-        })
+        },
+        actions = actions
+        )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

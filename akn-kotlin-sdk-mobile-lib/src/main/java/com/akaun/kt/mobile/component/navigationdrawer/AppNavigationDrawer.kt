@@ -58,7 +58,8 @@ Navigation Drawer Version 2
 class AppMenuItem(
     val name: String,
     val icon: ImageVector,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
+    val route: String = ""
 )
 
 
@@ -70,19 +71,20 @@ fun AppNavigationDrawer(
         ?: "No Tenant Selected",
     scope: CoroutineScope,
     drawerState: DrawerState,
+    currentRoute: String,
     menuItemList: List<AppMenuItem>,
-    gesturesEnabled: Boolean = true,
     onSettings: () -> Unit,
     onPersonalization: () -> Unit,
     onSignOut: () -> Unit,
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
-        gesturesEnabled = gesturesEnabled,
+        gesturesEnabled = drawerState.isOpen,
         drawerState = drawerState,
         drawerContent = {
             AppDrawer(
                 applicationName,
+                currentRoute,
                 tenantName,
                 menuItemList,
                 onSettings,
@@ -100,6 +102,7 @@ fun AppNavigationDrawer(
 @Composable
 fun AppDrawer(
     applicationName: String,
+    currentRoute: String,
     tenantName: String,
     menuItemList: List<AppMenuItem>,
     onSettings: () -> Unit,
@@ -143,7 +146,7 @@ fun AppDrawer(
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                 label = { Text(text = menuItem.name) },
                 icon = { Icon(menuItem.icon, null) },
-                selected = selectedItemIndex == index,
+                selected = currentRoute == menuItem.route,
                 onClick = {
                     selectedItemIndex = index
                     closeDrawer()
@@ -231,22 +234,26 @@ fun PreviewDrawer() {
         AppMenuItem(
             "My Sessions",
             Icons.Default.List,
-            {}
+            {},
+            ""
         ),
         AppMenuItem(
             "All Sessions",
             Icons.Default.List,
-            {}
+            {},
+            ""
         ),
         AppMenuItem(
             "My Device",
             Icons.Default.List,
-            {}
+            {},
+            ""
         )
     )
     AppDrawer(
         applicationName = "Stock take",
         tenantName = "staging tenant",
+        currentRoute = "",
         menuItemList = menuItemList,
         onSettings = { /*TODO*/ },
         onPersonalization = { /*TODO*/ },

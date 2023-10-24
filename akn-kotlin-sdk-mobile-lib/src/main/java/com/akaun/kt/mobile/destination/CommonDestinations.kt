@@ -37,6 +37,17 @@ object Splash: Destination{
     override val title = "Splash Page"
 }
 
+// ENVIRONMENT SELECTION GRAPH
+
+object EnvSelectionGraph: Destination{
+    override val route = "EnvSelectionGraph"
+    override val title = "Environment Selection Graph"
+}
+object EnvSelection : Destination{
+    override val route = "EnvSelection"
+    override val title = "Environment Selection"
+}
+
 // LOADING GRAPH
 
 object LoadingGraph: Destination{
