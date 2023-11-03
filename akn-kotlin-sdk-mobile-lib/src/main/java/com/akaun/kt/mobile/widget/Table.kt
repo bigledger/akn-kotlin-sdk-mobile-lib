@@ -1,5 +1,7 @@
 package com.akaun.kt.mobile.widget
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,20 +12,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 sealed class TableCellContent {
     data class TextContent(val text: String) : TableCellContent()
     data class ButtonContent(val icon: ImageVector, val onClick: () -> Unit) : TableCellContent()
+    data class StatusContent(val text : String, val boxColor : Color, val textColor : Color) : TableCellContent()
 }
 
 @Composable
@@ -33,12 +41,16 @@ fun Table(
     columnHeaders: List<String>,
     columnSize: List<Float>,
     rowClickable: Boolean = true,
+    textAlignment: List<TextAlign> = emptyList(),
     onClick: (Int) -> Unit  = {},
 
     ) {
 
     Column(modifier = modifier) {
-        TableHeaderRow(columnHeaders, columnSize)
+        TableHeaderRow(
+            columnHeaders = columnHeaders,
+            columnSize =  columnSize,
+            textAlignment = textAlignment)
 
         Divider(
             modifier = Modifier.fillMaxWidth(),
@@ -58,27 +70,33 @@ fun Table(
 }
 
 @Composable
-fun TableHeaderRow(rowData: List<String>, columnSize: List<Float>) {
+fun TableHeaderRow(columnHeaders: List<String>, textAlignment: List<TextAlign> = emptyList(), columnSize: List<Float>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        var columnSizeIndex = 0
-        rowData.forEach { data ->
+        columnHeaders.forEachIndexed { index,data ->
             Box(
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
-                    .weight(columnSize[columnSizeIndex])
+                    .weight(columnSize[index])
             ) {
+                Log.d("textAlign", "TableHeaderRow: ${textAlignment[index]}")
                 Text(
                     text = data,
-                    textAlign = TextAlign.Start
+                    textAlign = if(textAlignment.isEmpty()){
+                        TextAlign.Left
+                    }else {
+                        textAlignment[index]
+                    },
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth()
+
                 )
             }
-            columnSizeIndex += 1
         }
     }
     Divider(
@@ -110,19 +128,18 @@ fun TableRow(
         },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        var columnSizeIndex = 0
-        rowData.forEach { data ->
+        rowData.forEachIndexed { index,data ->
             Box(
                 modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
-                    .weight(columnSize[columnSizeIndex])
+                    .weight(columnSize[index]),
             ) {
                 when (data) {
                     is TableCellContent.TextContent -> {
                         Text(
                             text = data.text,
-                            textAlign = TextAlign.Start
+                            textAlign = TextAlign.Left
                         )
                     }
 
@@ -139,9 +156,25 @@ fun TableRow(
                             )
                         }
                     }
+
+                    is TableCellContent.StatusContent -> {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = data.boxColor,
+                                    shape = RoundedCornerShape(50)
+                                )
+                                .padding(8.dp)
+                                .fillMaxWidth(), // Adjust padding as needed
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = data.text , fontSize = 9.sp, color = data.textColor , fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
                 }
             }
-            columnSizeIndex += 1
         }
     }
     Divider(
