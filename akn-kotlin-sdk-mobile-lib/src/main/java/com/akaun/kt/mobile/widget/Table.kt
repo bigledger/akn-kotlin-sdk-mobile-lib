@@ -84,7 +84,6 @@ fun TableHeaderRow(columnHeaders: List<String>, textAlignment: List<TextAlign> =
                     .fillMaxWidth()
                     .weight(columnSize[index])
             ) {
-                Log.d("textAlign", "TableHeaderRow: ${textAlignment[index]}")
                 Text(
                     text = data,
                     textAlign = if(textAlignment.isEmpty()){
