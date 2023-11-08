@@ -60,7 +60,7 @@ dependencies {
 //    implementation("com.google.firebase:firebase-auth")
 
     // Also add the dependency for the Google Play services library and specify its version
-    implementation(libs.play.services.auth)
+    api(libs.play.services.auth)
 }
 
 publishing {
