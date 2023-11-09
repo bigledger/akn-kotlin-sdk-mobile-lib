@@ -85,10 +85,11 @@ fun LoginScreen(
 
     // For google sign in
     val launcher =
-        rememberLauncherForActivityResult(GoogleSignContract(googleSignInClient)) { idToken ->
+        rememberLauncherForActivityResult(GoogleSignContract(googleSignInClient)) { googleToken ->
+            Log.d("ID_TOKEN", "LoginScreen google ID Token: $googleToken")
             scope.launch {
                 viewModel.signInWithGoogle(
-                    googleToken = idToken ?: "",
+                    googleToken = googleToken ?: "",
                     appletCode = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
                         .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
                     onSignIn()
@@ -180,6 +181,7 @@ fun LoginScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly) {
 //                    SocialButtonComponent(icon = painterResource(id = R.drawable.apple))
                     SocialButtonComponent(
+                        modifier = Modifier.fillMaxWidth(),
                         icon = painterResource(id = R.drawable.google),
                         onClick = {
                             launcher.launch(null)

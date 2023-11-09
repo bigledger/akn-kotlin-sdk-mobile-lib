@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.CallSuper
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 
@@ -24,12 +25,14 @@ class GoogleSignContract(
     ): SynchronousResult<String?>? = null
 
     override fun parseResult(resultCode: Int, intent: Intent?): String? {
+        Log.d("CONTRACT RESULT", "resultCode: $resultCode")
         intent.takeIf { resultCode == Activity.RESULT_OK }?.apply {
             val task = GoogleSignIn.getSignedInAccountFromIntent(this)
             try {
                 val account = task.getResult(ApiException::class.java)
                 Log.d("GOOGLE SUCCESS", "Authorization with google: ${account.id}\"")
-                return account.idToken
+                Log.d("GOOGLE SUCCESS", "Authorization with google: ${account.serverAuthCode}\"")
+                return account.serverAuthCode
             } catch (e: ApiException) {
                 Log.d("GOOGLE FAIL", "Google sign in failed")
             }
