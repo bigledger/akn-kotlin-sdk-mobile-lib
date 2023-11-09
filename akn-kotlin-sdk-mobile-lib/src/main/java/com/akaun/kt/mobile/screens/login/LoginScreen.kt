@@ -234,37 +234,36 @@ fun LoginScreen(
                         })
                 }
             }
-
-            // Show overlay if loading
-            if (isLoading) {
-                Box(
-                    Modifier
-                        .matchParentSize()
-                        .background(Color.Gray.copy(alpha = 0.5f))
-                        .pointerInput(Unit) {
-                            detectTapGestures {
-                                // Do nothing to block touch events while log in attempt
-                                Log.d("LOAD BOX", "Touching while loading, LoginScreen")
-                            }
+        }
+        // Show overlay if loading
+        if (isLoading) {
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.8f))
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            // Do nothing to block touch events while log in attempt
+                            Log.d("LOAD BOX", "Touching while loading, LoginScreen")
                         }
-                )
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .background(Color.White, shape = CircleShape),
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .padding(15.dp)
-                                .align(Alignment.Center)
-                        )
                     }
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.White, shape = CircleShape),
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .align(Alignment.Center)
+                    )
                 }
-
             }
+
         }
     }
 }
