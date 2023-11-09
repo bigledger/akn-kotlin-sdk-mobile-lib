@@ -96,15 +96,25 @@ fun LoginScreen(
     val interactionSource = remember { MutableInteractionSource() }
     // For google sign in
     val launcher =
-        rememberLauncherForActivityResult(GoogleSignContract(googleSignInClient)) { googleToken ->
-            Log.d("ID_TOKEN", "LoginScreen google ID Token: $googleToken")
+        rememberLauncherForActivityResult(GoogleSignContract(googleSignInClient)) { googleLoginResult ->
             scope.launch {
-                viewModel.signInWithGoogle(
-                    googleToken = googleToken ?: "",
-                    googleClientId = googleClientId,
-                    appletCode = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
-                        .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
-                    onSignIn()
+                when (googleLoginResult) {
+                    is GoogleLoginResult.Success -> {
+                         Log.d("SIGN IN LAUNCH", "Google Login Success: ${googleLoginResult.googleIdToken}")
+                        viewModel.signInWithGoogle(
+                            googleToken = googleLoginResult.googleIdToken ?: "",
+                            googleClientId = googleClientId,
+                            appletCode = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
+                                .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
+                            onSignIn()
+                        }
+                    }
+                    is GoogleLoginResult.Error -> {
+                        Log.d("SIGN IN LAUNCH", "Google Login Error: ${googleLoginResult.errorMessage}")
+                    }
+                    is GoogleLoginResult.UserCanceled -> {
+                        Log.d("SIGN IN LAUNCH", "Google Login User Cancelled or smthg went wrong with calling google api (problem with google client id and others) ")
+                    }
                 }
             }
         }
