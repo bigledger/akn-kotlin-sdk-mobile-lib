@@ -2,7 +2,9 @@ package com.akaun.kt.mobile.screens.login
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +29,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -167,7 +173,7 @@ fun LoginScreen(
 
                     LoadingButtonComponent(text = stringResource(R.string.sign_in),
                         enabled = validInputs.value,
-                        loading = isLoading,
+//                        loading = isLoading,
                         modifier = Modifier.fillMaxWidth()) {
                         keyboardController?.hide()
                         viewModel.signInWithEmailOrMobileWithPassword(emailOrMobileNumber = emailOrMobileNumber.value.trim(),
@@ -217,6 +223,37 @@ fun LoginScreen(
                             toRegister()
                         })
                 }
+            }
+
+            // Show overlay if loading
+            if (isLoading) {
+                Box(
+                    Modifier
+                        .matchParentSize()
+                        .background(Color.Gray.copy(alpha = 0.5f))
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                // Do nothing to block touch events while log in attempt
+                                Log.d("LOAD BOX", "Touching while loading, LoginScreen")
+                            }
+                        }
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(Color.White, shape = CircleShape),
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .padding(15.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
+                }
+
             }
         }
     }
