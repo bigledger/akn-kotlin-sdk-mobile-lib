@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.CallSuper
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 
@@ -30,9 +29,10 @@ class GoogleSignContract(
             val task = GoogleSignIn.getSignedInAccountFromIntent(this)
             try {
                 val account = task.getResult(ApiException::class.java)
-                Log.d("GOOGLE SUCCESS", "Authorization with google: ${account.id}\"")
-                Log.d("GOOGLE SUCCESS", "Authorization with google: ${account.serverAuthCode}\"")
-                return account.serverAuthCode
+                Log.d("GOOGLE SUCCESS", "Authorization with google account.id: ${account.id}\"")
+                Log.d("GOOGLE SUCCESS", "Authorization with google account.idToken: ${account.idToken}\"")
+                Log.d("GOOGLE SUCCESS", "Authorization with google account.serverAuthCode: ${account.serverAuthCode}\"")
+                return account.idToken
             } catch (e: ApiException) {
                 Log.d("GOOGLE FAIL", "Google sign in failed")
             }

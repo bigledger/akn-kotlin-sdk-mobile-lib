@@ -92,6 +92,7 @@ class LoginScreenViewModel: ViewModel() {
 
     fun signInWithGoogle(
         googleToken: String,
+        googleClientId: String,
         appletCode: String,
         onLoginSuccess: () -> Unit
     ) = viewModelScope.launch {
@@ -99,7 +100,7 @@ class LoginScreenViewModel: ViewModel() {
         try {
             val googleLoginRequest = GoogleLoginRequest(
                 googleToken = googleToken,
-                googleAppId = ClientSdkConstants.googleClientAppId
+                googleAppId = googleClientId
             )
             val loginAPI = LoginModule.provideLoginClient()
             val call = loginAPI.loginToGoogleWithCall(googleLoginRequest)
