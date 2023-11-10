@@ -98,6 +98,11 @@ fun LoginScreen(
     val launcher =
         rememberLauncherForActivityResult(GoogleSignContract(googleSignInClient)) { googleLoginResult ->
             scope.launch {
+                try {
+                    googleSignInClient.signOut()
+                } catch (e: Exception) {
+                    Log.d("GOOGLE SIGN OUT FAILED", "Failed to google sign out. $e")
+                }
                 when (googleLoginResult) {
                     is GoogleLoginResult.Success -> {
                          Log.d("SIGN IN LAUNCH", "Google Login Success: ${googleLoginResult.googleIdToken}")
@@ -108,7 +113,6 @@ fun LoginScreen(
                                 .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
                             onSignIn()
                         }
-                        googleSignInClient.signOut()
                     }
                     is GoogleLoginResult.Error -> {
                         Log.d("SIGN IN LAUNCH", "Google Login Error: ${googleLoginResult.errorMessage}")
