@@ -108,6 +108,7 @@ fun LoginScreen(
                                 .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
                             onSignIn()
                         }
+                        googleSignInClient.signOut()
                     }
                     is GoogleLoginResult.Error -> {
                         Log.d("SIGN IN LAUNCH", "Google Login Error: ${googleLoginResult.errorMessage}")
@@ -240,7 +241,7 @@ fun LoginScreen(
             Box(
                 Modifier
                     .matchParentSize()
-                    .background(Color.Black.copy(alpha = 0.8f))
+                    .background(Color.Black.copy(alpha = 0.7f))
                     .pointerInput(Unit) {
                         detectTapGestures {
                             // Do nothing to block touch events while log in attempt
