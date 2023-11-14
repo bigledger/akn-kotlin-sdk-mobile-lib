@@ -10,9 +10,11 @@ import androidx.lifecycle.viewModelScope
 import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.utils.isValidEmail
+import com.akaun.kt.sdk.models.dbschema.GoogleLoginRequest
 import com.akaun.kt.sdk.models.dbschema.LoginRequest
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.shared.BasicApiResponseModel
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.shared.LoginResponse
+import com.akaun.kt.sdk.utils.ClientSdkConstants
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +46,6 @@ class LoginScreenViewModel: ViewModel() {
         onLoginSuccess: () -> Unit
     ) = viewModelScope.launch {
         isLoading = true
-        //TODO: Use the common shared preferences constants
         try {
             val loginRequest = if (isValidEmail(emailOrMobileNumber)) {
                 LoginRequest(email = emailOrMobileNumber, password = password)
@@ -87,8 +88,56 @@ class LoginScreenViewModel: ViewModel() {
             isLoading = false
             Log.d("Failed", "Failed Reason: ${ex.message}")
         }
+    }
 
+    fun signInWithGoogle(
+        googleToken: String,
+        googleClientId: String,
+        appletCode: String,
+        onLoginSuccess: () -> Unit
+    ) = viewModelScope.launch {
+        isLoading = true
+        try {
+            val googleLoginRequest = GoogleLoginRequest(
+                googleToken = googleToken,
+                googleAppId = googleClientId
+            )
+            val loginAPI = LoginModule.provideLoginClient()
+            val call = loginAPI.loginToGoogleWithCall(googleLoginRequest)
+            call.enqueue(object : Callback<BasicApiResponseModel<LoginResponse>> {
+                override fun onResponse(call: Call<BasicApiResponseModel<LoginResponse>>, response: Response<BasicApiResponseModel<LoginResponse>>) {
+                    if (response.isSuccessful) {
+                        val responseBody: BasicApiResponseModel<LoginResponse>? = response.body()
+                        if (responseBody != null) {
 
+                            setupLoginSharedPreferences(responseBody = responseBody, appletCode = appletCode)
+                            // Proceed to main page
+                            onLoginSuccess()
+                        }
+                    } else {
+                        isLoading = false
+                        isInvalid = true
+                        val errorBody: String? = response.errorBody()?.string()
+                        // Handle error response
+                        Log.d("Error response", "error reason: $errorBody")
+                    }
+                }
+
+                // TODO: Handle onFailure
+                override fun onFailure(call : Call<BasicApiResponseModel<LoginResponse>>, t: Throwable) {
+                    isLoading = false
+                    isError = true
+                    // Handle failure
+                    Log.d("GOOGLE FAIL", "Google sign in failed VM")
+                    Log.e("API Call", "Failed Reason: ${t.message}")
+                }
+
+            })
+        } catch (ex: Exception) {
+            isError = true
+            isLoading = false
+            Log.d("Failed", "Failed Reason: ${ex.message}")
+        }
     }
 
     fun setupLoginSharedPreferences(appletCode: String, responseBody:BasicApiResponseModel<LoginResponse> ) {

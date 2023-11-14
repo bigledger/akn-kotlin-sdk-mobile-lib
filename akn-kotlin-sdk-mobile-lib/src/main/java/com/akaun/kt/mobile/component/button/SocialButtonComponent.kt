@@ -21,14 +21,19 @@ import com.akaun.kt.mobile.R
 
 
 @Composable
-fun SocialButtonComponent(text: String = "", icon: Painter, onClick: () -> Unit = {}) {
+fun SocialButtonComponent(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    icon: Painter,
+    onClick: () -> Unit = {}
+) {
     val colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.primary)
     val buttonWidth = 90.dp
     val buttonStrokeWidth = 1.dp
     val buttonBorderColor = MaterialTheme.colorScheme.primary
 
-    Button(modifier = Modifier.widthIn(min = buttonWidth),
+    Button(modifier = modifier.widthIn(min = buttonWidth),
         border = BorderStroke(buttonStrokeWidth, buttonBorderColor),
         onClick = onClick,
         colors = colors,

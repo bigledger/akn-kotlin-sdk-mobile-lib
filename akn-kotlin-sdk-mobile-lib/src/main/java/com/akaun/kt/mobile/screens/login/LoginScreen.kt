@@ -1,6 +1,11 @@
 package com.akaun.kt.mobile.screens.login
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,16 +16,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,15 +61,20 @@ import com.akaun.kt.mobile.destination.Register
 import com.akaun.kt.mobile.destination.ResendVerification
 import com.akaun.kt.mobile.utils.isValidEmail
 import com.akaun.kt.mobile.utils.isValidMobileNumber
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(
     viewModel: LoginScreenViewModel = viewModel(),
+    googleSignInClient: GoogleSignInClient,
+    googleClientId: String,
     toRegister: () -> Unit,
     toResendVerification: () -> Unit,
     toForgotPassword: () -> Unit,
-    onSignIn: () -> Unit
+    onSignIn: () -> Unit,
+
 ) {
     val isLoading = viewModel.isLoading
     val isError = viewModel.isError
@@ -74,15 +91,47 @@ fun LoginScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
+    // For google sign in
+    val launcher =
+        rememberLauncherForActivityResult(GoogleSignContract(googleSignInClient)) { googleLoginResult ->
+            scope.launch {
+                try {
+                    googleSignInClient.signOut()
+                } catch (e: Exception) {
+                    Log.d("GOOGLE SIGN OUT FAILED", "Failed to google sign out. $e")
+                }
+                when (googleLoginResult) {
+                    is GoogleLoginResult.Success -> {
+                         Log.d("SIGN IN LAUNCH", "Google Login Success: ${googleLoginResult.googleIdToken}")
+                        viewModel.signInWithGoogle(
+                            googleToken = googleLoginResult.googleIdToken ?: "",
+                            googleClientId = googleClientId,
+                            appletCode = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
+                                .getString(CommonSharedPreferenceConstants.APPLET_CODE, "") ?: ""){
+                            onSignIn()
+                        }
+                    }
+                    is GoogleLoginResult.Error -> {
+                        Log.d("SIGN IN LAUNCH", "Google Login Error: ${googleLoginResult.errorMessage}")
+                    }
+                    is GoogleLoginResult.UserCanceled -> {
+                        Log.d("SIGN IN LAUNCH", "Google Login User Cancelled or smthg went wrong with calling google api (problem with google client id and others) ")
+                    }
+                }
+            }
+        }
 
     if (isError) {
         viewModel.resetIsError()
-        Toast.makeText(context, "An error occured!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "An error occurred!", Toast.LENGTH_SHORT).show()
     }
 
     if (isInvalid) {
         viewModel.resetIsInvalid()
-        Toast.makeText(context, "incorrect credentials", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Incorrect credentials, sign in failed.", Toast.LENGTH_SHORT).show()
     }
 
     Box(
@@ -90,7 +139,14 @@ fun LoginScreen(
         contentAlignment = Alignment.Center) {
         Surface(modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)) {
+            .padding(20.dp)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                focusManager.clearFocus()
+            }
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -132,7 +188,7 @@ fun LoginScreen(
 
                     LoadingButtonComponent(text = stringResource(R.string.sign_in),
                         enabled = validInputs.value,
-                        loading = isLoading,
+//                        loading = isLoading,
                         modifier = Modifier.fillMaxWidth()) {
                         keyboardController?.hide()
                         viewModel.signInWithEmailOrMobileWithPassword(emailOrMobileNumber = emailOrMobileNumber.value.trim(),
@@ -157,9 +213,15 @@ fun LoginScreen(
 
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly) {
-                    SocialButtonComponent(icon = painterResource(id = R.drawable.apple))
-                    SocialButtonComponent(icon = painterResource(id = R.drawable.google))
-                    SocialButtonComponent(icon = painterResource(id = R.drawable.facebook))
+//                    SocialButtonComponent(icon = painterResource(id = R.drawable.apple))
+                    SocialButtonComponent(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = painterResource(id = R.drawable.google),
+                        onClick = {
+                            launcher.launch(null)
+                        }
+                    )
+//                    SocialButtonComponent(icon = painterResource(id = R.drawable.facebook))
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -177,6 +239,36 @@ fun LoginScreen(
                         })
                 }
             }
+        }
+        // Show overlay if loading
+        if (isLoading) {
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.7f))
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            // Do nothing to block touch events while log in attempt
+                            Log.d("LOAD BOX", "Touching while loading, LoginScreen")
+                        }
+                    }
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.White, shape = CircleShape),
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .align(Alignment.Center)
+                    )
+                }
+            }
+
         }
     }
 }
