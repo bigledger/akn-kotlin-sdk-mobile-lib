@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -42,14 +43,15 @@ fun Table(
     columnSize: List<Float>,
     rowClickable: Boolean = true,
     textAlignment: List<TextAlign> = emptyList(),
+    fontSize : TextUnit = 14.sp,
     onClick: (Int) -> Unit  = {},
-
     ) {
 
     Column(modifier = modifier) {
         TableHeaderRow(
             columnHeaders = columnHeaders,
             columnSize =  columnSize,
+            fontSize = fontSize,
             textAlignment = textAlignment)
 
         Divider(
@@ -59,7 +61,7 @@ fun Table(
         )
         LazyColumn() {
             itemsIndexed(data) { index, rowData ->
-                TableRow(rowData, columnSize, index,rowClickable) {
+                TableRow(rowData, columnSize, index,rowClickable,fontSize) {
                     onClick(it)
                 }
             }
@@ -70,7 +72,7 @@ fun Table(
 }
 
 @Composable
-fun TableHeaderRow(columnHeaders: List<String>, textAlignment: List<TextAlign> = emptyList(), columnSize: List<Float>) {
+fun TableHeaderRow(columnHeaders: List<String>, fontSize : TextUnit, textAlignment: List<TextAlign> = emptyList(), columnSize: List<Float>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,7 +94,8 @@ fun TableHeaderRow(columnHeaders: List<String>, textAlignment: List<TextAlign> =
                         textAlignment[index]
                     },
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    fontSize = fontSize
 
                 )
             }
@@ -112,6 +115,7 @@ fun TableRow(
     columnSize: List<Float>,
     rowIndex: Int,
     rowClickable : Boolean,
+    fontSize : TextUnit ,
     onRowClicked: (Int) -> Unit = {}
 ) {
 
@@ -138,7 +142,8 @@ fun TableRow(
                     is TableCellContent.TextContent -> {
                         Text(
                             text = data.text,
-                            textAlign = TextAlign.Left
+                            textAlign = TextAlign.Left,
+                            fontSize = fontSize
                         )
                     }
 
@@ -168,7 +173,7 @@ fun TableRow(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = data.text , fontSize = 9.sp, color = data.textColor , fontWeight = FontWeight.Medium
+                                text = data.text , fontSize = fontSize, color = data.textColor , fontWeight = FontWeight.Medium
                             )
                         }
                     }
