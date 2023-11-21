@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun SplashScreen(
     toAuth: () -> Unit,
     toLoading: () -> Unit,
+    setDefaultEnvironment : () -> Unit,
     viewModel: SplashViewModel = viewModel()
     ) {
     LaunchedEffect(key1 = true) {
@@ -22,6 +23,7 @@ fun SplashScreen(
         if (viewModel.isSignedIn()) {
             toLoading()
         } else {
+            setDefaultEnvironment()
             toAuth()
         }
     }

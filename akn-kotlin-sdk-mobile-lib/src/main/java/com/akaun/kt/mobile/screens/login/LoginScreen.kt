@@ -5,6 +5,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +18,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -74,6 +83,7 @@ fun LoginScreen(
     toResendVerification: () -> Unit,
     toForgotPassword: () -> Unit,
     onSignIn: () -> Unit,
+    toEnvSelection : () -> Unit
 
 ) {
     val isLoading = viewModel.isLoading
@@ -134,6 +144,8 @@ fun LoginScreen(
         Toast.makeText(context, "Incorrect credentials, sign in failed.", Toast.LENGTH_SHORT).show()
     }
 
+    val scrollableState = rememberScrollState()
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center) {
@@ -148,8 +160,18 @@ fun LoginScreen(
             }
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.verticalScroll(scrollableState)
             ) {
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
+                    IconButton(onClick = { toEnvSelection() }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "settings"
+                        )
+                    }
+                }
                 LogoComponent(width = 200.dp, height = 50.dp)
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -272,4 +294,5 @@ fun LoginScreen(
         }
     }
 }
+
 
