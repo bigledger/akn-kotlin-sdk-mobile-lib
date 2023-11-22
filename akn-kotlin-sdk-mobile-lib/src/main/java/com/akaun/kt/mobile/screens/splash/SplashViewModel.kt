@@ -31,7 +31,9 @@ class SplashViewModel: ViewModel() {
 
         if(expTime != null){
             val localDateTimeExpiry = convertUnixTimestampToLocalDateTime(expTime.toString())
-            return LocalDateTime.now() >= localDateTimeExpiry
+            // TODO : CHANGE IT BACK
+//            return LocalDateTime.now() >= localDateTimeExpiry
+            return LocalDateTime.now().plusDays(35) >= localDateTimeExpiry
         }
 
         return false
