@@ -62,60 +62,63 @@ fun EnvSelectionScreen(
     ) {
 
     DefaultBackScaffold(title = "") {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-            ) {
-            LogoComponent(width = 200.dp, height = 50.dp)
-
-            // Get currently selected URL
-            val url = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME).getString(
-                CommonSharedPreferenceConstants.BASE_URL,"") ?: ""
-
-            // Find back the environment object so that can display the environment name using the url
-            val environment = Environment.fromUrl(url)
-            val envSelected = remember{
-                mutableStateOf(environment?.value ?: "")
-            }
-
+        Surface(modifier = Modifier.padding(it).fillMaxSize()){
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-                ) {
-                TitleLargeText(text = "Choose the Environment")
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                LogoComponent(width = 200.dp, height = 50.dp)
 
-                DropdownMenuBox(
-                    label = "Environment",
+                // Get currently selected URL
+                val url = CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME).getString(
+                    CommonSharedPreferenceConstants.BASE_URL,"") ?: ""
+
+                // Find back the environment object so that can display the environment name using the url
+                val environment = Environment.fromUrl(url)
+                val envSelected = remember{
+                    mutableStateOf(environment?.value ?: "")
+                }
+
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    value = envSelected.value,
-                    dropDownItemList = environmentList
-                ) {environment ->
-                    envSelected.value = environment
-                }
-            }
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    TitleLargeText(text = "Choose the Environment")
 
-            CommonButtonComponent(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Select & Save"
+                    DropdownMenuBox(
+                        label = "Environment",
+                        modifier = Modifier.fillMaxWidth(),
+                        value = envSelected.value,
+                        dropDownItemList = environmentList
+                    ) {environment ->
+                        envSelected.value = environment
+                    }
+                }
+
+                CommonButtonComponent(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Select & Save"
                 ) {
 
-                if(envSelected.value ==Environment.Production.value ){
-                    viewModel.setEnvironment(Environment.Production.url)
-                    viewModel.setEnvironmentAppletCode(productionAppletCode)
-                }else if (envSelected.value ==Environment.Cloud.value){
-                    viewModel.setEnvironment(Environment.Cloud.url)
-                    viewModel.setEnvironmentAppletCode(cloudAppletCode)
-                }else{ // dev
-                    viewModel.setEnvironment(Environment.Dev.url)
-                    viewModel.setEnvironmentAppletCode(devAppletCode)
+                    if(envSelected.value ==Environment.Production.value ){
+                        viewModel.setEnvironment(Environment.Production.url)
+                        viewModel.setEnvironmentAppletCode(productionAppletCode)
+                    }else if (envSelected.value ==Environment.Cloud.value){
+                        viewModel.setEnvironment(Environment.Cloud.url)
+                        viewModel.setEnvironmentAppletCode(cloudAppletCode)
+                    }else{ // dev
+                        viewModel.setEnvironment(Environment.Dev.url)
+                        viewModel.setEnvironmentAppletCode(devAppletCode)
+                    }
+                    toSignIn()
                 }
-                toSignIn()
             }
         }
+
     }
 }
 
