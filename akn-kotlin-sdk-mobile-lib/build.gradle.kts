@@ -51,9 +51,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation(libs.akn.client.sdk)
-    implementation(libs.jwt.api)
-    implementation(libs.jwt.impl)
-    implementation(libs.jwt.jackson)
+    implementation(libs.jwt)
 
 //    // Import the BoM for the Firebase platform
 //    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))

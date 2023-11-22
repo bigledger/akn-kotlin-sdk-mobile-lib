@@ -7,7 +7,7 @@ junit = "4.13.2"
 material3 = "1.1.1"
 play-services-auth = "20.7.0"
 ui-tooling = "1.5.1"
-jjwt ="0.11.2"
+jwt ="3.18.1"
 
 [libraries]
 # Client SDK
@@ -21,9 +21,7 @@ ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref =
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "ui-tooling" }
 
 # jwt
-jwt-api = { group = "io.jsonwebtoken" , name = "jjwt-api" ,version.ref  = "jjwt"}
-jwt-impl = { group = "io.jsonwebtoken" , name = "jjwt-impl" ,version.ref  = "jjwt"}
-jwt-jackson = { group = "io.jsonwebtoken" , name = "jjwt-jackson" ,version.ref  = "jjwt"}
+jwt = { group = "com.auth0" , name = "java-jwt" ,version.ref  = "jwt"}
 
 # Testing
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }

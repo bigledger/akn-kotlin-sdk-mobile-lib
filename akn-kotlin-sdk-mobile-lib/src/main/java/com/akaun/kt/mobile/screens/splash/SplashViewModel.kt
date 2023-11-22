@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.utils.convertUnixTimestampToLocalDateTime
-import com.akaun.kt.mobile.utils.decodeAuthToken
+import com.akaun.kt.mobile.utils.extractPayload
 import java.time.LocalDateTime
 
 class SplashViewModel: ViewModel() {
@@ -27,7 +27,9 @@ class SplashViewModel: ViewModel() {
         val authToken =  sharedPreferences.getString(CommonSharedPreferenceConstants.AUTH_TOKEN,null)
 
         Log.d("authToken", "isAuthTokenExpired: ${authToken}")
-        val authTokenMap = authToken?.let { decodeAuthToken(it) }
+        val authTokenMap = authToken?.let { extractPayload(it) }
+
+        Log.d("authTokenMap", "isAuthTokenExpired: ${authTokenMap.toString()} ")
 
         val expTime = authTokenMap?.get("exp")
 
@@ -35,11 +37,7 @@ class SplashViewModel: ViewModel() {
 
         if(expTime != null){
             val localDateTimeExpiry = convertUnixTimestampToLocalDateTime(expTime.toString())
-            // TODO : CHANGE IT BACK
-//            return LocalDateTime.now() >= localDateTimeExpiry
-            Log.d("time", "isAuthTokenExpired: ${LocalDateTime.now().plusDays(35)}")
-            Log.d("localDateTImeExpiy", "isAuthTokenExpired: ${localDateTimeExpiry} ")
-            return LocalDateTime.now().plusDays(35) >= localDateTimeExpiry
+            return LocalDateTime.now() >= localDateTimeExpiry
         }
 
         return false
