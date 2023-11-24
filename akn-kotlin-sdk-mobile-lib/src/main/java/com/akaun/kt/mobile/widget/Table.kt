@@ -44,6 +44,7 @@ fun Table(
     rowClickable: Boolean = true,
     textAlignment: List<TextAlign> = emptyList(),
     fontSize : TextUnit = 14.sp,
+    statusFontSize : TextUnit = 9.sp,
     onClick: (Int) -> Unit  = {},
     ) {
 
@@ -61,7 +62,7 @@ fun Table(
         )
         LazyColumn() {
             itemsIndexed(data) { index, rowData ->
-                TableRow(rowData, columnSize, index,rowClickable,fontSize) {
+                TableRow(rowData, columnSize, index,rowClickable,fontSize,statusFontSize) {
                     onClick(it)
                 }
             }
@@ -116,6 +117,7 @@ fun TableRow(
     rowIndex: Int,
     rowClickable : Boolean,
     fontSize : TextUnit ,
+    statusFontSize : TextUnit,
     onRowClicked: (Int) -> Unit = {}
 ) {
 
@@ -173,7 +175,7 @@ fun TableRow(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = data.text , fontSize = fontSize, color = data.textColor , fontWeight = FontWeight.Medium
+                                text = data.text , fontSize = statusFontSize, color = data.textColor , fontWeight = FontWeight.Medium
                             )
                         }
                     }
