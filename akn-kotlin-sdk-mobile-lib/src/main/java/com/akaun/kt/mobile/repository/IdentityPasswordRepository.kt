@@ -6,9 +6,9 @@ import com.akaun.kt.sdk.models.dbschema.ForgotPasswordInitRequest
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.idservices.IdentityPasswordService
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.shared.BasicApiResponseModel
 import com.akaun.kt.sdk.utils.wrapper.DataOrException
-import javax.inject.Inject
 
-class IdentityPasswordRepository @Inject constructor(private val api: IdentityPasswordService){
+
+class IdentityPasswordRepository constructor(private val api: IdentityPasswordService){
 
     suspend fun forgotPasswordInit(forgotPasswordInitRequest : ForgotPasswordInitRequest)
             : DataOrException<BasicApiResponseModel<String?>, Boolean, Exception> {

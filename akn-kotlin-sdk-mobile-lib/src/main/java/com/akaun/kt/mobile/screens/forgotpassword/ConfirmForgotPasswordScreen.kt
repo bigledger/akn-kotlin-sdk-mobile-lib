@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.akaun.kt.mobile.R
 import com.akaun.kt.mobile.component.button.LoadingButtonComponent
@@ -56,7 +56,7 @@ import com.akaun.kt.mobile.utils.isValidMobileNumber
 import com.akaun.kt.sdk.models.dbschema.ForgotPasswordConfirmRequest
 
 @Composable
-fun ConfirmForgotPasswordScreen(navController: NavHostController , emailOrMobileNumber : String , confirmForgotPasswordScreenViewModel: ConfirmForgotPasswordScreenViewModel = hiltViewModel()) {
+fun ConfirmForgotPasswordScreen(navController: NavHostController , emailOrMobileNumber : String , confirmForgotPasswordScreenViewModel: ConfirmForgotPasswordScreenViewModel = viewModel()) {
     val tacCode = rememberSaveable { mutableStateOf("") }
     val password = rememberSaveable { mutableStateOf("") }
     val confirmPassword = rememberSaveable { mutableStateOf("") }

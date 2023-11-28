@@ -12,11 +12,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-@Module
-@InstallIn(SingletonComponent::class)
-class IdentityPasswordModule {
 
-    @Provides
+object IdentityPasswordModule {
+
     fun provideIdentityPasswordApi() : IdentityPasswordService {
         val sharedPref = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
         val auth = sharedPref.getString(CommonSharedPreferenceConstants.AUTH_TOKEN, "") ?: ""

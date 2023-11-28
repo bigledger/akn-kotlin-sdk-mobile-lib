@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.akaun.kt.mobile.screens.forgotpassword.ForgotPasswordScreenViewModel
 import com.akaun.kt.mobile.R
@@ -44,7 +44,7 @@ import com.akaun.kt.sdk.models.dbschema.ForgotPasswordInitRequest
 
 
 @Composable
-fun ForgotPasswordScreen(navController: NavHostController, identityPasswordScreenViewModel: ForgotPasswordScreenViewModel = hiltViewModel()) {
+fun ForgotPasswordScreen(navController: NavHostController, identityPasswordScreenViewModel: ForgotPasswordScreenViewModel = viewModel()) {
     val emailOrMobileNumber = rememberSaveable { mutableStateOf("") }
     val validInputs = rememberSaveable(emailOrMobileNumber.value) {
         mutableStateOf(
