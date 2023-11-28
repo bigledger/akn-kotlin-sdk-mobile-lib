@@ -1,5 +1,6 @@
-package com.akaun.kt.mobile.screens.forgotpassword
 
+
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,32 +19,43 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.akaun.kt.mobile.screens.forgotpassword.ForgotPasswordScreenViewModel
 import com.akaun.kt.mobile.R
-import com.akaun.kt.mobile.component.button.CommonButtonComponent
+import com.akaun.kt.mobile.component.button.LoadingButtonComponent
 import com.akaun.kt.mobile.component.inputfield.LoginTextFieldComponent
 import com.akaun.kt.mobile.component.multimedia.LogoComponent
 import com.akaun.kt.mobile.component.text.BasicTextComponent
 import com.akaun.kt.mobile.component.text.ParaTextComponent
 import com.akaun.kt.mobile.component.text.TitleTextComponent
 import com.akaun.kt.mobile.destination.AuthGraph
+import com.akaun.kt.mobile.destination.ConfirmForgotPassword
 import com.akaun.kt.mobile.destination.Login
 import com.akaun.kt.mobile.utils.isValidEmail
 import com.akaun.kt.mobile.utils.isValidMobileNumber
+import com.akaun.kt.sdk.models.dbschema.ForgotPasswordInitRequest
 
 
 @Composable
-fun ForgotPasswordScreen(navController: NavHostController) {
+fun ForgotPasswordScreen(navController: NavHostController, identityPasswordScreenViewModel: ForgotPasswordScreenViewModel = hiltViewModel()) {
     val emailOrMobileNumber = rememberSaveable { mutableStateOf("") }
     val validInputs = rememberSaveable(emailOrMobileNumber.value) {
         mutableStateOf(
             (isValidEmail(emailOrMobileNumber.value.trim()) ||
                     isValidMobileNumber(emailOrMobileNumber.value.trim())))
+    }
+    val context = LocalContext.current
+
+    if(identityPasswordScreenViewModel.isErrorForgotPasswordInit.value){
+        Toast.makeText(context,"Email or mobile number not found",Toast.LENGTH_SHORT).show()
+        identityPasswordScreenViewModel.isErrorForgotPasswordInit.value = false
     }
 
     Box(
@@ -75,7 +87,21 @@ fun ForgotPasswordScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                CommonButtonComponent(text = "Submit" , modifier = Modifier.width(280.dp))
+                val isLoading = identityPasswordScreenViewModel.forgotPasswordInit.value.loading!!
+                LoadingButtonComponent(
+                    text = "Submit" ,
+                    modifier = Modifier.width(280.dp) ,
+                    enabled = emailOrMobileNumber.value.isNotEmpty() && (isValidEmail(emailOrMobileNumber.value.trim()) || isValidMobileNumber(emailOrMobileNumber.value.trim())) && !isLoading,
+                    loading = isLoading ){
+                    identityPasswordScreenViewModel.forgotPasswordInit(
+                        forgotPasswordInitRequest = ForgotPasswordInitRequest(
+                            email = if(isValidEmail(emailOrMobileNumber.value.trim())) emailOrMobileNumber.value.trim() else null,
+                            mobileNumber = if(isValidMobileNumber(emailOrMobileNumber.value.trim())) emailOrMobileNumber.value.trim() else null,
+                        )
+                    ){
+                        navController.navigate(ConfirmForgotPassword.route + "/${emailOrMobileNumber.value}")
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 

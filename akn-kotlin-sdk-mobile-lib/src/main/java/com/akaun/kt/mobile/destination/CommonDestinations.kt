@@ -16,6 +16,12 @@ object ForgotPassword: Destination{
     override val title = "Forgot Password"
 }
 
+object ConfirmForgotPassword: Destination {
+    const val emailOrMobileNumber = "emailOrMobileNumber"
+    override val route = "ConfirmForgotPassword"
+    override val title = "Confirm Forgot Password"
+}
+
 object Register: Destination{
     override val route = "Register"
     override val title = "Register"
