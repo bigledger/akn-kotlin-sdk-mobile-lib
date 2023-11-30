@@ -52,6 +52,7 @@ dependencies {
 
     implementation(libs.akn.client.sdk)
     implementation(libs.jwt)
+    implementation(libs.coil)
 
 //    // Import the BoM for the Firebase platform
 //    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))

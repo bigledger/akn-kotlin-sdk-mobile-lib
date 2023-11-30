@@ -8,6 +8,7 @@ material3 = "1.1.1"
 play-services-auth = "20.7.0"
 ui-tooling = "1.5.1"
 jwt ="3.18.1"
+coil = "2.1.0"
 
 [libraries]
 # Client SDK
@@ -22,6 +23,9 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", versio
 
 # jwt
 jwt = { group = "com.auth0" , name = "java-jwt" ,version.ref  = "jwt"}
+
+#coil
+coil = {group = "io.coil-kt" , name = "coil-compose" ,version.ref = "coil"}
 
 # Testing
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
