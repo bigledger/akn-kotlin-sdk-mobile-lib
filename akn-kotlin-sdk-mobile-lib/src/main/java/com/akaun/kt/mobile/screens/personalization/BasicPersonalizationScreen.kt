@@ -44,7 +44,8 @@ import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 @Composable
 fun BasicPersonalizationScreen(
     basicPersonalizationScreenViewModel: BasicPersonalizationScreenViewModel = viewModel(),
-    onSignOut : ()->Unit
+    showSignOutButton : Boolean = false,
+    onSignOut : ()->Unit = {}
 ) {
 
     val context = LocalContext.current
@@ -146,12 +147,14 @@ fun BasicPersonalizationScreen(
                 }
             )
         }
-        CommonButtonComponent(text = "Sign Out" , modifier = Modifier
-            .fillMaxWidth(0.6f)
-            .align(Alignment.CenterHorizontally)){
-            showDialog = true
-        }
 
+        if(showSignOutButton){
+            CommonButtonComponent(text = "Sign Out" , modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .align(Alignment.CenterHorizontally)){
+                showDialog = true
+            }
+        }
 
     }
 
