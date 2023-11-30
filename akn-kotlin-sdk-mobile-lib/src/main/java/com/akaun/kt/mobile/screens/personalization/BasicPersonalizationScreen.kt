@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.akaun.kt.mobile.component.button.CommonButtonComponent
@@ -43,7 +44,7 @@ import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 
 @Composable
 fun BasicPersonalizationScreenViewModel(
-    basicPersonalizationScreenViewModel: BasicPersonalizationScreenViewModel = hiltViewModel(),
+    basicPersonalizationScreenViewModel: BasicPersonalizationScreenViewModel = viewModel(),
     onSignOut : ()->Unit
 ) {
 
