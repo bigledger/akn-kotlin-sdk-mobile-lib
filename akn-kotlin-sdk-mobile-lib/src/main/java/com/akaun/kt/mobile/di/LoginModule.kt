@@ -20,4 +20,16 @@ object LoginModule {
             .build()
             .create(LoginService::class.java)
     }
+
+    fun provideUserAppletLinkClient(auth: String): LoginService {
+        return Retrofit.Builder()
+            .baseUrl(
+                CommonPrefHelper.getPrefs(CommonPrefHelper.COMMON_PREF_NAME)
+                    .getString(CommonSharedPreferenceConstants.BASE_URL, Core2Config.CLOUD_URL) ?:
+                Core2Config.CLOUD_URL)
+            .client(RetrofitClient.getAuthorizedClient(authorization = auth, ""))
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(LoginService::class.java)
+    }
 }
