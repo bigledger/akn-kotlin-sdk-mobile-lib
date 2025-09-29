@@ -1,5 +1,4 @@
 package com.akaun.kt.mobile.screens.login
-import android.annotation.SuppressLint
 import com.akaun.kt.mobile.di.LoginModule
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -10,11 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.akaun.kt.mobile.core.sharedpreference.CommonPrefHelper
 import com.akaun.kt.mobile.core.sharedpreference.CommonSharedPreferenceConstants
 import com.akaun.kt.mobile.utils.isValidEmail
+import com.akaun.kt.sdk.models.aggregates.erp.UserAppletLinkResponse
 import com.akaun.kt.sdk.models.dbschema.GoogleLoginRequest
 import com.akaun.kt.sdk.models.dbschema.LoginRequest
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.shared.BasicApiResponseModel
 import com.akaun.kt.sdk.services.comakaunapi.core2.apiservices.shared.LoginResponse
-import com.akaun.kt.sdk.utils.ClientSdkConstants
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -52,37 +51,26 @@ class LoginScreenViewModel: ViewModel() {
             } else {
                 LoginRequest(mobileNumber = emailOrMobileNumber, password = password)
             }
-            val loginAPI = LoginModule.provideLoginClient()
-            val call = loginAPI.loginWithCall(loginRequest)
-            call.enqueue(object : Callback<BasicApiResponseModel<LoginResponse>> {
-                @SuppressLint("CommitPrefEdits")
-                override fun onResponse(call: Call<BasicApiResponseModel<LoginResponse>>, response: Response<BasicApiResponseModel<LoginResponse>>) {
-                    if (response.isSuccessful) {
-                        val responseBody: BasicApiResponseModel<LoginResponse>? = response.body()
-                        if (responseBody != null) {
 
-                            setupLoginSharedPreferences(responseBody = responseBody, appletCode = appletCode)
-                            // Proceed to main page
-                            onLoginSuccess()
-                        }
-                    } else {
-                        isLoading = false
-                        isInvalid = true
-                        val errorBody: String? = response.errorBody()?.string()
-                        // Handle error response
-                        Log.d("Error response", "error reason: $errorBody")
-                    }
+            val loginResult = LoginModule.provideLoginClient().login(loginRequest)
+            val userAppletLinks = LoginModule.provideUserAppletLinkClient(
+                loginResult.data?.authToken ?: "").getUserAppletLInks()
+
+            if (userAppletLinks.data == null && loginResult.data == null) {
+                isError = true
+                isLoading = false
+            } else {
+                loginResult.data?.let {
+                    setupLoginSharedPreferences(
+                        appletCode = appletCode,
+                        loginResponseBody = it,
+                        userAppletLinkResponse = userAppletLinks.data ?: emptyList()
+                    )
                 }
 
-                // TODO: Handle onFailure
-                override fun onFailure(call : Call<BasicApiResponseModel<LoginResponse>>, t: Throwable) {
-                    isLoading = false
-                    isError = true
-                    // Handle failure
-                    Log.e("API Call", "Failed Reason: ${t.message}")
-                }
-
-            })
+                // Proceed to main page
+                onLoginSuccess()
+            }
         } catch (ex: Exception) {
             isError = true
             isLoading = false
@@ -102,37 +90,25 @@ class LoginScreenViewModel: ViewModel() {
                 googleToken = googleToken,
                 googleAppId = googleClientId
             )
-            val loginAPI = LoginModule.provideLoginClient()
-            val call = loginAPI.loginToGoogleWithCall(googleLoginRequest)
-            call.enqueue(object : Callback<BasicApiResponseModel<LoginResponse>> {
-                override fun onResponse(call: Call<BasicApiResponseModel<LoginResponse>>, response: Response<BasicApiResponseModel<LoginResponse>>) {
-                    if (response.isSuccessful) {
-                        val responseBody: BasicApiResponseModel<LoginResponse>? = response.body()
-                        if (responseBody != null) {
 
-                            setupLoginSharedPreferences(responseBody = responseBody, appletCode = appletCode)
-                            // Proceed to main page
-                            onLoginSuccess()
-                        }
-                    } else {
-                        isLoading = false
-                        isInvalid = true
-                        val errorBody: String? = response.errorBody()?.string()
-                        // Handle error response
-                        Log.d("Error response", "error reason: $errorBody")
-                    }
+            val loginResult = LoginModule.provideLoginClient().loginToGoogle(googleLoginRequest)
+            val userAppletLinks = LoginModule.provideUserAppletLinkClient(
+                loginResult.data?.authToken ?: "").getUserAppletLInks()
+
+            if (userAppletLinks.data == null && loginResult.data == null) {
+                isError = true
+                isLoading = false
+            } else {
+                loginResult.data?.let {
+                    setupLoginSharedPreferences(
+                        appletCode = appletCode,
+                        loginResponseBody = it,
+                        userAppletLinkResponse = userAppletLinks.data ?: emptyList()
+                    )
                 }
-
-                // TODO: Handle onFailure
-                override fun onFailure(call : Call<BasicApiResponseModel<LoginResponse>>, t: Throwable) {
-                    isLoading = false
-                    isError = true
-                    // Handle failure
-                    Log.d("GOOGLE FAIL", "Google sign in failed VM")
-                    Log.e("API Call", "Failed Reason: ${t.message}")
-                }
-
-            })
+                // Proceed to main page
+                onLoginSuccess()
+            }
         } catch (ex: Exception) {
             isError = true
             isLoading = false
@@ -140,15 +116,19 @@ class LoginScreenViewModel: ViewModel() {
         }
     }
 
-    fun setupLoginSharedPreferences(appletCode: String, responseBody:BasicApiResponseModel<LoginResponse> ) {
+    private fun setupLoginSharedPreferences(
+        appletCode: String,
+        loginResponseBody: LoginResponse,
+        userAppletLinkResponse: List<UserAppletLinkResponse>
+    ) {
         val sharedPreferences = CommonPrefHelper.getPrefs(CommonPrefHelper.LOGIN_PREF_NAME)
         val editor = sharedPreferences.edit()
         // auth token
-        editor.putString(CommonSharedPreferenceConstants.AUTH_TOKEN, responseBody.data?.authToken)
+        editor.putString(CommonSharedPreferenceConstants.AUTH_TOKEN, loginResponseBody.authToken)
 
         // app login subject guid
         editor.putString(CommonSharedPreferenceConstants.SUBJECT_GUID,
-            responseBody.data?.subjectGuid
+            loginResponseBody.subjectGuid
         )
         editor.apply()
 
@@ -158,34 +138,37 @@ class LoginScreenViewModel: ViewModel() {
         // Indicate user has just signed in
         editor.putBoolean(CommonSharedPreferenceConstants.JUST_SIGNED_IN, true)
 
-        // Filter based on the appletCode
-        val appletTenantTokenList = responseBody.data?.appletTenantTokenList
-            ?.filter { it.appletCode.lowercase() == appletCode.lowercase() }
+        // Filter based on the appletCode, to only get links for a particular applet
+        val userAppletLinkList = userAppletLinkResponse.filter {
+            it.applet.applet_code == appletCode.lowercase()
+        }
 
         // List of tenants found with the appletCode from filter above
-        val tenantCodesList = appletTenantTokenList?.map { it.tenantCode }
-        val tenantGuidList = appletTenantTokenList?.map { it.tenantGuid }
+        val tenantCodesList = userAppletLinkList.map { it.tenant.tenant_ccode }
+        val tenantGuidList = userAppletLinkList.map { it.tenant.guid }
 
-        // stock transfer applet guid
-        val firstAppletGuid: String? = appletTenantTokenList?.firstOrNull()?.appletGuid
+        // Get the first applet guid
+        val firstAppletGuid: String? = userAppletLinkList.firstOrNull()?.applet?.guid
 
         // Store tenantCode in sharedPreferences
-        if (!tenantCodesList.isNullOrEmpty()) {
+        if (tenantCodesList.isNotEmpty()) {
             val serializedTenantCodes = tenantCodesList.joinToString(",")
             editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_LIST, serializedTenantCodes)
             editor.apply()
 
             // Put the first tenantCode as default selected in sharedPreferences
-            editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED, tenantCodesList.get(0))
+            editor.putString(CommonSharedPreferenceConstants.TENANT_CODE_SELECTED,
+                tenantCodesList[0]
+            )
             editor.apply()
 
             val serializedTenantGuids = tenantGuidList?.joinToString(",")
             editor.putString(CommonSharedPreferenceConstants.TENANT_GUID_LIST, serializedTenantGuids)
             editor.apply()
 
-            if (tenantGuidList != null) {
-                editor.putString(CommonSharedPreferenceConstants.TENANT_GUID_SELECTED, tenantGuidList.get(0))
-            }
+            editor.putString(CommonSharedPreferenceConstants.TENANT_GUID_SELECTED,
+                tenantGuidList[0]
+            )
             editor.apply()
 
             // appletGuid
