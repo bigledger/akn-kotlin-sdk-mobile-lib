@@ -144,7 +144,7 @@ class LoginScreenViewModel: ViewModel() {
         }
 
         // List of tenants found with the appletCode from filter above
-        val tenantCodesList = userAppletLinkList.map { it.tenant.tenant_ccode }
+        val tenantCodesList = userAppletLinkList.map { it.tenant.tenant_code }
         val tenantGuidList = userAppletLinkList.map { it.tenant.guid }
 
         // Get the first applet guid
