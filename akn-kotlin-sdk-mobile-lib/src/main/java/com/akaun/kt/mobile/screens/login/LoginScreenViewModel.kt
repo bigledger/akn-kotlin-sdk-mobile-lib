@@ -140,7 +140,7 @@ class LoginScreenViewModel: ViewModel() {
 
         // Filter based on the appletCode, to only get links for a particular applet
         val userAppletLinkList = userAppletLinkResponse.filter {
-            it.applet.applet_code == appletCode.lowercase()
+            it.applet.applet_code.lowercase() == appletCode.lowercase()
         }
 
         // List of tenants found with the appletCode from filter above
