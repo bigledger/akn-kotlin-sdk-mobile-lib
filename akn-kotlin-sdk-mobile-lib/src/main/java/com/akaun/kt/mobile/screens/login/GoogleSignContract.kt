@@ -36,14 +36,27 @@ class GoogleSignContract(
                     Log.d("GOOGLE SUCCESS", "Authorization with google account.serverAuthCode: ${account.serverAuthCode}\"")
                     GoogleLoginResult.Success(account.idToken)
                 } catch (e: ApiException) {
-                    Log.d("GOOGLE FAIL", "Google sign in failed")
-                    GoogleLoginResult.Error("Google Sign In Failed")
+                    Log.d("GOOGLE FAIL", "Google sign in failed with status code: ${e.statusCode}, message: ${e.message}")
+                    GoogleLoginResult.Error("Google Sign In Failed (code: ${e.statusCode})")
                 }
             } else {
                 GoogleLoginResult.Error("Google Sign In Empty Intent")
             }
-            Activity.RESULT_CANCELED -> GoogleLoginResult.UserCanceled
-            else ->  GoogleLoginResult.Error("General Error")
+            Activity.RESULT_CANCELED -> {
+                // Try to extract more info from the intent even on cancel
+                if (intent != null) {
+                    try {
+                        val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                        task.getResult(ApiException::class.java)
+                    } catch (e: ApiException) {
+                        Log.d("GOOGLE CANCELED", "Canceled with ApiException status code: ${e.statusCode}, message: ${e.message}")
+                        return GoogleLoginResult.Error("Google Sign In failed (code: ${e.statusCode})")
+                    }
+                }
+                Log.d("GOOGLE CANCELED", "User canceled with no additional info")
+                GoogleLoginResult.UserCanceled
+            }
+            else -> GoogleLoginResult.Error("General Error (resultCode: $resultCode)")
         }
     }
 
