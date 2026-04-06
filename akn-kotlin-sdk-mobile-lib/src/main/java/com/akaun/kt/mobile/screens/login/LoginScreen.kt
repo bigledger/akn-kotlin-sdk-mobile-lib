@@ -126,9 +126,11 @@ fun LoginScreen(
                     }
                     is GoogleLoginResult.Error -> {
                         Log.d("SIGN IN LAUNCH", "Google Login Error: ${googleLoginResult.errorMessage}")
+                        Toast.makeText(context, "Google Sign In failed: ${googleLoginResult.errorMessage}", Toast.LENGTH_SHORT).show()
                     }
                     is GoogleLoginResult.UserCanceled -> {
                         Log.d("SIGN IN LAUNCH", "Google Login User Cancelled or smthg went wrong with calling google api (problem with google client id and others) ")
+                        Toast.makeText(context, "Google Sign In was cancelled or failed. Check Google client configuration.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
