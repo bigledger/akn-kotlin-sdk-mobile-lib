@@ -10,7 +10,7 @@ val emailRegex = "(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'" +
         "\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
 
 fun isValidEmail(email: String): Boolean {
-    return emailRegex.toRegex().matches(email)
+    return emailRegex.toRegex(RegexOption.IGNORE_CASE).matches(email)
 }
 
 // Util to check if string is follow
